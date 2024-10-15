@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+<svg width="800px" height="800px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: url(#neonGradient);
+        stroke-linejoin: round;
+        stroke-width: 2px;
+        filter: url(#neonGlow);
+      }
+    </style>
+
+    <!-- Neon Gradient -->
+    <linearGradient id="neonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00FFFF"/>
+      <stop offset="100%" stop-color="#0000FF"/>
+    </linearGradient>
+
+    <!-- Neon Glow Effect -->
+    <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g data-name="Layer 22" id="Layer_22">
+    <path class="cls-1" d="M40,52V50l-5.49-4.8A7.39,7.39,0,0,1,32,39.66V34a4,4,0,0,1,4-4h0a4,4,0,0,1,4,4v2"/>
+    <path class="cls-1" d="M36,30V26a8,8,0,0,1,8-8H54a8,8,0,0,1,8,8v9.51A20.49,20.49,0,0,1,56,50h0v2"/>
+    <rect class="cls-1" height="10" width="20" x="38" y="52"/>
+    <line class="cls-1" x1="36" x2="62" y1="26" y2="26"/>
+    <polyline class="cls-1" points="38 56 44 56 44 62"/>
+    <path class="cls-1" d="M24,52V50l5.49-4.8A7.39,7.39,0,0,0,32,39.66V34a4,4,0,0,0-4-4h0a4,4,0,0,0-4,4v2"/>
+    <path class="cls-1" d="M28,30V26a8,8,0,0,0-8-8H10a8,8,0,0,0-8,8v9.51A20.49,20.49,0,0,0,8,50H8v2"/>
+    <rect class="cls-1" height="10" transform="translate(32 114) rotate(-180)" width="20" x="6" y="52"/>
+    <line class="cls-1" x1="28" x2="2" y1="26" y2="26"/>
+    <polyline class="cls-1" points="26 56 20 56 20 62"/>
+    <polyline class="cls-1" points="24 15 19 10 26 10 23 4 30 7 32 2 35 7 40 4 38 10 45 10 40 15"/>
+  </g>
+</svg>
