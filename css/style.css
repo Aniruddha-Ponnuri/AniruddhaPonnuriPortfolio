@@ -8793,7 +8793,35 @@ h1, h2, h3, h4, h5,
   .ftco-about .counter-wrap .text p span.number {
     font-weight: 600;
     color: #ffbd39; }
+    .ftco-about.box {
+      width: 100%;
+      display: block;
+      -webkit-border-radius: 4px;
+      -moz-border-radius: 4px;
+      -ms-border-radius: 4px;
+      border-radius: 4px; }
+      @media (max-width: 991.98px) {
+        .ftco-about .box {
+          margin-bottom: 30px; } }
+      .ftco-about .box .icon {
+        width: 100px;
+        height: 100px;
+        background: rgba(255, 255, 255, 0.1);
+        margin: 0 auto;
+        margin-bottom: 2em;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        -ms-border-radius: 50%;
+        border-radius: 50%; }
+        .ftco-about .box .icon span {
+          color: #ffbd39;
+          font-size: 30px; }
+      .ftco-about.box h3 {
+        font-size: 17px;
+        font-weight: 500;
+        text-transform: uppercase; }
 
+        
 .resume-wrap {
   width: 100%;
   margin-bottom: 30px;
