@@ -34,7 +34,7 @@
     </style>
   </head>
 
-  <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+  <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300" style="position: relative;">
 
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar ftco-navbar-light site-navbar-target" id="ftco-navbar">
       <div class="container">
@@ -56,25 +56,25 @@
     </nav>
 
 <!-- Home Section -->
-<section id="home-section" class="hero section">
+<section id="home-section" class="hero section ftco-section ftco-no-pb">
   <div class="container">
     <div class="home-slider owl-carousel">
       <!-- Slide 1 -->
       <div class="slider-item">
         <div class="overlay"></div>
         <div class="container">
-          <div class="row d-md-flex no-gutters slider-text align-items-end justify-content-end" data-scrollax-parent="true">
-            <div class="one-third js-fullheight order-md-last img" style="background-image:url(images/bg_2.png);">
+          <div class="row d-md-flex no-gutters slider-text align-items-end justify-content-end img" data-scrollax-parent="true">
+            <div class="one-third js-fullheight order-md-last img-about img d-flex align-items-stretch" style="background-image:url(images/bg_2.png);">
               <div class="overlay"></div>
             </div>
-            <div class="one-forth d-flex align-items-center ftco-animate" data-scrollax="properties: { translateY: '50%' }">
+            <div class="one-forth d-flex align-items-center ftco-animate" data-scrollax="properties: { translateY: '40%' }">
               <div class="text">
                 <span class="subheading">Hello!</span>
                 <h1 class="mb-4 mt-3">I'm <span>Ponnuri Aniruddha</span></h1>
                 <h2 class="mb-4">An Aspiring Data Engineer and AI/ML Developer</h2>
                 <p>
-                  <a href="#resume-section" class="btn btn-primary py-3 px-4" onclick="showSection('resume-section')">Resume</a> 
-                  <a href="#projects-section" class="btn btn-white btn-outline-white py-3 px-4" onclick="showSection('projects-section')">Projects</a>
+                  <a href="#resume-section" class="btn btn-primary py-3 px-4" onclick="showSection('resume-section')"><span>Resume</span></a> 
+                  <a href="#projects-section" class="btn btn-white btn-outline-white py-3 px-4" onclick="showSection('projects-section')"><span>Projects</span></a>
                 </p>
               </div>
             </div>
@@ -86,17 +86,17 @@
       <div class="slider-item">
         <div class="overlay"></div>
         <div class="container">
-          <div class="row d-flex no-gutters slider-text align-items-end justify-content-end" data-scrollax-parent="true">
-            <div class="one-third js-fullheight order-md-last img" style="background-image:url(images/bg_1.png);">
+          <div class="row d-flex no-gutters slider-text align-items-end justify-content-end img" data-scrollax-parent="true">
+            <div class="one-third js-fullheight order-md-last img-about img d-flex align-items-stretch" style="background-image:url(images/bg_1.png);">
               <div class="overlay"></div>
             </div>
-            <div class="one-forth d-flex align-items-center ftco-animate" data-scrollax="properties: { translateY: '50%' }">
+            <div class="one-forth d-flex align-items-center ftco-animate" data-scrollax="properties: { translateY: '70%' }">
               <div class="text">
                 <span class="subheading">Hello!</span>
                 <h1 class="mb-4 mt-3">I'm an <span>Aspiring</span> Data Engineer and AI/ML Developer</h1>
                 <p>
-                  <a href="#resume-section" class="btn btn-primary py-3 px-4" onclick="showSection('resume-section')">Resume</a> 
-                  <a href="#projects-section" class="btn btn-white btn-outline-white py-3 px-4" onclick="showSection('projects-section')">Projects</a>
+                  <a href="#resume-section" class="btn btn-primary py-3 px-4" onclick="showSection('resume-section')"><span>Resume</span></a> 
+                  <a href="#projects-section" class="btn btn-white btn-outline-white py-3 px-4" onclick="showSection('projects-section')"><span>Projects</span></a>
                 </p>
               </div>
             </div>
@@ -213,7 +213,7 @@
     </section>
 
     <!-- Education Section -->
-    <section class="timeline">
+    <div class="timeline ">
       <div class="title-wrapper">
         <div class="icon-box">
           <ion-icon name="school-outline"></ion-icon>
@@ -253,7 +253,7 @@
           </p>
         </li>
       </ol>
-    </section>
+    </div>
   </div>
 </section>
 
@@ -266,8 +266,8 @@
         <p>Explore my proficiency in various programming languages, frameworks, and tools used in the tech industry.</p>
       </div>
     </div>
-
     <ul class="skills-list content-card">
+      
       <!-- Languages Section -->
       <li class="skills-item">
         <div class="title-wrapper">
@@ -275,33 +275,67 @@
         </div>
         <div class="flex">
           <div class="icon-box">
-            <a href="https://www.python.org/" target="_blank" rel="noreferrer">
-              <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="python" width="35" height="35" class="rounded-md">
+            <a href="https://en.wikipedia.org/wiki/C_(programming_language)" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/c-%2300599C.svg?style=flat&logo=c&logoColor=white" alt="C">
             </a>
           </div>
           <div class="icon-box">
-            <a href="https://www.java.com/" target="_blank" rel="noreferrer">
-              <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg" alt="java" width="35" height="35" class="rounded-md">
-            </a>
-          </div>
-          <div class="icon-box">
-            <a href="https://www.learn-c.org/" target="_blank" rel="noreferrer">
-              <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-original.svg" alt="C" width="35" height="35" class="rounded-md">
-            </a>
-          </div>
-          <div class="icon-box">
-            <a href="https://www.cplusplus.com/" target="_blank" rel="noreferrer">
-              <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-original.svg" alt="C++" width="35" height="35" class="rounded-md">
-            </a>
-          </div>
-          <div class="icon-box">
-            <a href="https://html5.org/" target="_blank" rel="noreferrer">
-              <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-plain.svg" alt="HTML5" width="35" height="35" class="rounded-md">
+            <a href="https://en.wikipedia.org/wiki/C%2B%2B" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/c++-%2300599C.svg?style=flat&logo=c%2B%2B&logoColor=white" alt="C++">
             </a>
           </div>
           <div class="icon-box">
             <a href="https://dart.dev/" target="_blank" rel="noreferrer">
-              <img src="https://raw.githubusercontent.com/devicons/devicon/refs/heads/master/icons/dart/dart-original.svg" alt="Dart" width="35" height="35" class="rounded-md">
+              <img src="https://img.shields.io/badge/dart-%230175C2.svg?style=flat&logo=dart&logoColor=white" alt="Dart">
+            </a>
+          </div>
+          <div class="icon-box">
+            <a href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=flat&logo=html5&logoColor=white" alt="HTML5">
+            </a>
+          </div>
+          <div class="icon-box">
+            <a href="https://www.javascript.com/" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/javascript-%23323330.svg?style=flat&logo=javascript&logoColor=%23F7DF1E" alt="JavaScript">
+            </a>
+          </div>
+          <div class="icon-box">
+            <a href="https://www.oracle.com/java/" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/java-%23ED8B00.svg?style=flat&logo=openjdk&logoColor=white" alt="Java">
+            </a>
+          </div>
+          <div class="icon-box">
+            <a href="https://www.python.org/" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/python-3670A0?style=flat&logo=python&logoColor=ffdd54" alt="Python">
+            </a>
+          </div>
+        </div>
+      </li>
+
+      <!-- Cloud & Platforms Section -->
+      <li class="skills-item">
+        <div class="title-wrapper">
+          <h5 class="h5">Cloud & Platforms</h5>
+        </div>
+        <div class="flex">
+          <div class="icon-box">
+            <a href="https://aws.amazon.com/" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/AWS-%23FF9900.svg?style=flat&logo=amazon-aws&logoColor=white" alt="AWS">
+            </a>
+          </div>
+          <div class="icon-box">
+            <a href="https://azure.microsoft.com/en-us/" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/azure-%230072C6.svg?style=flat&logo=microsoftazure&logoColor=white" alt="Azure">
+            </a>
+          </div>
+          <div class="icon-box">
+            <a href="https://firebase.google.com/" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/firebase-%23039BE5.svg?style=flat&logo=firebase" alt="Firebase">
+            </a>
+          </div>
+          <div class="icon-box">
+            <a href="https://pages.github.com/" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/github%20pages-121013?style=flat&logo=github&logoColor=white" alt="GitHub Pages">
             </a>
           </div>
         </div>
@@ -314,28 +348,23 @@
         </div>
         <div class="flex">
           <div class="icon-box">
-            <a href="https://scikit-learn.org/stable/" target="_blank" rel="noreferrer">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Scikit_learn_logo_small.svg" alt="Scikit-Learn" width="35" height="35" class="rounded-md">
-            </a>
-          </div>
-          <div class="icon-box">
-            <a href="https://www.tensorflow.org/" target="_blank" rel="noreferrer">
-              <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/tensorflow/tensorflow-original.svg" alt="TensorFlow" width="35" height="35" class="rounded-md">
-            </a>
-          </div>
-          <div class="icon-box">
-            <a href="https://opencv.org/" target="_blank" rel="noreferrer">
-              <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/opencv/opencv-original.svg" alt="OpenCV" width="35" height="35" class="rounded-md">
+            <a href="https://keras.io/" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/Keras-%23D00000.svg?style=flat&logo=Keras&logoColor=white" alt="Keras">
             </a>
           </div>
           <div class="icon-box">
             <a href="https://pytorch.org/" target="_blank" rel="noreferrer">
-              <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/pytorch/pytorch-original.svg" alt="PyTorch" width="35" height="35" class="rounded-md">
+              <img src="https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=flat&logo=PyTorch&logoColor=white" alt="PyTorch">
             </a>
           </div>
           <div class="icon-box">
-            <a href="https://pypi.org/project/xgboost/" target="_blank" rel="noreferrer">
-              <img src="assets/images/xgboost.svg" alt="XGBoost" width="35" height="35" class="rounded-md">
+            <a href="https://scikit-learn.org/stable/" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/scikit--learn-%23F7931E.svg?style=flat&logo=scikit-learn&logoColor=white" alt="Scikit-Learn">
+            </a>
+          </div>
+          <div class="icon-box">
+            <a href="https://www.tensorflow.org/" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/TensorFlow-%23FF6F00.svg?style=flat&logo=TensorFlow&logoColor=white" alt="TensorFlow">
             </a>
           </div>
         </div>
@@ -348,28 +377,23 @@
         </div>
         <div class="flex">
           <div class="icon-box">
+            <a href="https://git-scm.com/" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/git-%23F05033.svg?style=flat&logo=git&logoColor=white" alt="Git">
+            </a>
+          </div>
+          <div class="icon-box">
+            <a href="https://github.com/" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/github-%23121011.svg?style=flat&logo=github&logoColor=white" alt="GitHub">
+            </a>
+          </div>
+          <div class="icon-box">
             <a href="https://www.tableau.com/" target="_blank" rel="noreferrer">
-              <img src="assets/images/tableau.png" alt="Tableau" width="35" height="35" class="rounded-md">
+              <img src="https://img.shields.io/badge/tableau-%2302569B.svg?style=flat&logo=tableau&logoColor=white" alt="Tableau">
             </a>
           </div>
           <div class="icon-box">
             <a href="https://hadoop.apache.org/" target="_blank" rel="noreferrer">
-              <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/hadoop/hadoop-original.svg" alt="Hadoop" width="35" height="35" class="rounded-md">
-            </a>
-          </div>
-          <div class="icon-box">
-            <a href="https://git-scm.com/" target="_blank" rel="noreferrer">
-              <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/git/git-original.svg" alt="Git" width="35" height="35" class="rounded-md">
-            </a>
-          </div>
-          <div class="icon-box">
-            <a href="https://spark.apache.org/" target="_blank" rel="noreferrer">
-              <img src="assets/images/apache_spark-icon.svg" alt="Apache Spark" width="35" height="35" class="rounded-md">
-            </a>
-          </div>
-          <div class="icon-box">
-            <a href="https://flutter.dev/" target="_blank" rel="noreferrer">
-              <img src="https://raw.githubusercontent.com/devicons/devicon/refs/heads/master/icons/flutter/flutter-original.svg" alt="Flutter" width="35" height="35" class="rounded-md">
+              <img src="https://img.shields.io/badge/Apache%20Hadoop-66CCFF?style=flat&logo=apachehadoop&logoColor=black" alt="Hadoop">
             </a>
           </div>
         </div>
@@ -382,18 +406,23 @@
         </div>
         <div class="flex">
           <div class="icon-box">
-            <a href="https://www.mongodb.com/" target="_blank" rel="noreferrer">
-              <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mongodb/mongodb-original-wordmark.svg" alt="MongoDB" width="35" height="35" class="rounded-md">
-            </a>
-          </div>
-          <div class="icon-box">
             <a href="https://www.mysql.com/" target="_blank" rel="noreferrer">
-              <img src="https://raw.githubusercontent.com/devicons/devicon/refs/heads/master/icons/mysql/mysql-original.svg" alt="MySQL" width="35" height="35" class="rounded-md">
+              <img src="https://img.shields.io/badge/mysql-4479A1.svg?style=flat&logo=mysql&logoColor=white" alt="MySQL">
             </a>
           </div>
           <div class="icon-box">
-            <a href="https://www.postgresql.org" target="_blank" rel="noreferrer">
-              <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original-wordmark.svg" alt="PostgreSQL" width="35" height="35" class="rounded-md">
+            <a href="https://www.mongodb.com/" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=flat&logo=mongodb&logoColor=white" alt="MongoDB">
+            </a>
+          </div>
+          <div class="icon-box">
+            <a href="https://sqlite.org/index.html" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/sqlite-%2307405e.svg?style=flat&logo=sqlite&logoColor=white" alt="SQLite">
+            </a>
+          </div>
+          <div class="icon-box">
+            <a href="https://www.microsoft.com/en-us/sql-server/sql-server-downloads" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/Microsoft%20SQL%20Server-CC2927?style=flat&logo=microsoft%20sql%20server&logoColor=white" alt="Microsoft SQL Server">
             </a>
           </div>
         </div>
@@ -406,23 +435,63 @@
         </div>
         <div class="flex">
           <div class="icon-box">
-            <a href="https://expressjs.com" target="_blank" rel="noreferrer">
-              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLA972a1NXwGHTIpgjxpRdu1DD5te1evggDgjNvM_FcbtGxaPYrHbV27RNzJSA_ZhrY28&amp;usqp=CAU" alt="ExpressJS" width="35" height="35" class="rounded-md">
-            </a>
-          </div>
-          <div class="icon-box">
-            <a href="https://nodejs.org" target="_blank" rel="noreferrer">
-              <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nodejs/nodejs-original-wordmark.svg" alt="NodeJS" width="35" height="35" class="rounded-md">
+            <a href="https://nodejs.org/" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/node.js-6DA55F?style=flat&logo=node.js&logoColor=white" alt="NodeJS">
             </a>
           </div>
           <div class="icon-box">
             <a href="https://www.djangoproject.com/" target="_blank" rel="noreferrer">
-              <img src="assets/images/django.svg" alt="Django" width="35" height="35" class="rounded-md">
+              <img src="https://img.shields.io/badge/django-%23092E20.svg?style=flat&logo=django&logoColor=white" alt="Django">
+            </a>
+          </div>
+          <div class="icon-box">
+            <a href="https://flask.palletsprojects.com/en/2.0.x/" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/flask-%23000.svg?style=flat&logo=flask&logoColor=white" alt="Flask">
+            </a>
+          </div>
+          <div class="icon-box">
+            <a href="https://fastapi.tiangolo.com/" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/FastAPI-005571?style=flat&logo=fastapi" alt="FastAPI">
+            </a>
+          </div>
+        </div>
+      </li>
+
+      <!-- Additional Tools Section -->
+      <li class="skills-item">
+        <div class="title-wrapper">
+          <h5 class="h5">Additional Tools</h5>
+        </div>
+        <div class="flex">
+          <div class="icon-box">
+            <a href="https://opencv.org/" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/opencv-%23white.svg?style=flat&logo=opencv&logoColor=white" alt="OpenCV">
+            </a>
+          </div>
+          <div class="icon-box">
+            <a href="https://reactjs.org/" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/react-%2320232a.svg?style=flat&logo=react&logoColor=%2361DAFB" alt="React">
+            </a>
+          </div>
+          <div class="icon-box">
+            <a href="https://www.numpy.org/" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/numpy-%23013243.svg?style=flat&logo=numpy&logoColor=white" alt="NumPy">
+            </a>
+          </div>
+          <div class="icon-box">
+            <a href="https://pandas.pydata.org/" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/pandas-%23150458.svg?style=flat&logo=pandas&logoColor=white" alt="Pandas">
+            </a>
+          </div>
+          <div class="icon-box">
+            <a href="https://matplotlib.org/" target="_blank" rel="noreferrer">
+              <img src="https://img.shields.io/badge/Matplotlib-%23ffffff.svg?style=flat&logo=Matplotlib&logoColor=black" alt="Matplotlib">
             </a>
           </div>
         </div>
       </li>
     </ul>
+
   </div>
 </section>
 

@@ -9855,3 +9855,62 @@ textarea.form-control {
   border: none;
   filter: grayscale(1) invert(1);
 }
+
+.star {
+    position: fixed;
+    background-color: white;
+    border-radius: 50%;
+    z-index: -1; /* Ensure stars stay behind content */
+    opacity: 0.8;
+    animation: twinkle 2s infinite ease-in-out;
+    top: 0;
+    left: 0;
+}
+
+@keyframes twinkle {
+    0%, 100% {
+        opacity: 0.8;
+    }
+    50% {
+        opacity: 0.4;
+    }
+}
+
+/* Ensure the slider item takes up 75% of the viewport height */
+.js-fullheight {
+  height: 75vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#home-section {
+  height: 100vh; /* Full viewport height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Remove any unwanted overflow */
+}
+
+/* Ensure that the background image is properly sized and centered */
+.slider-item {
+  height: 100%;
+  background-size: cover;
+  background-position: center center;
+  margin: 0;
+  padding: 0;
+}
+
+.skills-item {
+  margin-bottom: 20px; /* Adjust the space between items */
+}
+
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* Adjust the space between icons inside the flex container */
+}
+
+.title-wrapper {
+  margin-bottom: 5px; /* Adds space below the title */
+}
