@@ -31,7 +31,7 @@ const contactInfo = [
     icon: Globe,
     title: 'Website',
     content: 'Portfolio',
-    link: 'https://aniruddha-ponnuri.github.io/AniruddhaPonnuriPortfolio/',
+    link: 'aniruddha-ponnuri-portfolio.vercel.app',
   },
 ];
 
