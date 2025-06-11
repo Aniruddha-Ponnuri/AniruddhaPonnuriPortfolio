@@ -11,7 +11,7 @@ import profileImage from '@/app/images/bg_2.png';
 
 const personalInfo = [
   { label: 'Name', value: 'Ponnuri Aniruddha', icon: User },
-  { label: 'Date of Birth', value: 'June 13, 1997', icon: Calendar },
+  { label: 'Date of Birth', value: 'June 13, 2003', icon: Calendar },
   { label: 'Email', value: 'aniruddha.ponnuri@gmail.com', icon: Mail },
   { label: 'Location', value: 'Chennai, India', icon: MapPin },
 ];
