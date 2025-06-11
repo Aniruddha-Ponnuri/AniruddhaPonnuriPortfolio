@@ -7,7 +7,18 @@ import { SearchFiltersComponent } from '@/app/components/search/search-filters';
 import { ProjectCardComponent } from '@/app/components/project/project-card';
 import { ProjectSkeleton } from '@/app/components/ui/loading-skeleton';
 import { ClientOnly } from '@/app/components/ui/client-only';
+import HeroSection from '@/app/components/sections/hero';
+import AboutSection from '@/app/components/sections/about';
+import ContactSection from '@/app/components/sections/contact';
 import { GitHubUser, ProjectCard, SearchFilters } from '@/app/types';
+
+const fetchGitHubData = async () => {
+  const response = await fetch('/api/github');
+  if (!response.ok) {
+    throw new Error('Failed to fetch GitHub data');
+  }
+  return response.json();
+};
 
 export default function HomePage() {
   const [filters, setFilters] = useState<SearchFilters>({
@@ -21,13 +32,11 @@ export default function HomePage() {
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['github-data'],
-    queryFn: async () => {
-      const response = await fetch('/api/github');
-      if (!response.ok) {
-        throw new Error('Failed to fetch GitHub data');
-      }
-      return response.json();
-    },
+    queryFn: fetchGitHubData,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes (replaces cacheTime in newer versions)
+    retry: 3,
+    retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 
   const user: GitHubUser | null = data?.user || null;
@@ -184,59 +193,78 @@ export default function HomePage() {
     <div className="min-h-screen bg-background">
       <Header user={user} />
       
-      <main className="container mx-auto px-4 py-8 space-y-8">
-        <ClientOnly fallback={
-          <div className="space-y-4 p-4 border rounded-lg bg-card">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="md:col-span-2 h-10 bg-gray-200 rounded animate-pulse" />
-              <div className="h-10 bg-gray-200 rounded animate-pulse" />
-              <div className="h-10 bg-gray-200 rounded animate-pulse" />
-            </div>
-            <div className="h-20 bg-gray-200 rounded animate-pulse" />
-          </div>
-        }>
-          <SearchFiltersComponent
-            filters={filters}
-            onFiltersChange={setFilters}
-            availableLanguages={availableLanguages}
-            selectedTags={selectedTags}
-            onTagSelect={handleTagSelect}
-            onTagRemove={handleTagRemove}
-            availableTags={availableTags}
-          />
-        </ClientOnly>
-
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold">
-              Projects ({filteredRepositories.length})
-            </h2>
+      {/* Hero Section */}
+      <HeroSection />
+      
+      {/* About Section */}
+      <AboutSection />
+      
+      {/* Projects Section */}
+      <section id="projects" className="py-20">
+        <div className="container mx-auto px-4 space-y-8">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4">My Projects</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Explore my latest work and open-source contributions
+            </p>
           </div>
 
-          {isLoading ? (
-            <ProjectSkeleton />
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredRepositories.map((project) => (
-                <ProjectCardComponent
-                  key={project.id}
-                  project={project}
-                  onGenerateReadme={handleGenerateReadme}
-                />
-              ))}
+          <ClientOnly fallback={
+            <div className="space-y-4 p-4 border rounded-lg bg-card">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="md:col-span-2 h-10 bg-gray-200 rounded animate-pulse" />
+                <div className="h-10 bg-gray-200 rounded animate-pulse" />
+                <div className="h-10 bg-gray-200 rounded animate-pulse" />
+              </div>
+              <div className="h-20 bg-gray-200 rounded animate-pulse" />
             </div>
-          )}
+          }>
+            <SearchFiltersComponent
+              filters={filters}
+              onFiltersChange={setFilters}
+              availableLanguages={availableLanguages}
+              selectedTags={selectedTags}
+              onTagSelect={handleTagSelect}
+              onTagRemove={handleTagRemove}
+              availableTags={availableTags}
+            />
+          </ClientOnly>
 
-          {!isLoading && filteredRepositories.length === 0 && (
-            <div className="text-center py-12">
-              <h3 className="text-lg font-medium mb-2">No repositories found</h3>
-              <p className="text-muted-foreground">
-                Try adjusting your search filters or check back later.
-              </p>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-2xl font-bold">
+                Projects ({filteredRepositories.length})
+              </h3>
             </div>
-          )}
+
+            {isLoading ? (
+              <ProjectSkeleton />
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredRepositories.map((project) => (
+                  <ProjectCardComponent
+                    key={project.id}
+                    project={project}
+                    onGenerateReadme={handleGenerateReadme}
+                  />
+                ))}
+              </div>
+            )}
+
+            {!isLoading && filteredRepositories.length === 0 && (
+              <div className="text-center py-12">
+                <h3 className="text-lg font-medium mb-2">No repositories found</h3>
+                <p className="text-muted-foreground">
+                  Try adjusting your search filters or check back later.
+                </p>
+              </div>
+            )}
+          </div>
         </div>
-      </main>
+      </section>
+
+      {/* Contact Section */}
+      <ContactSection />
     </div>
   );
 }
