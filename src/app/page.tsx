@@ -1,15 +1,20 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Header } from '@/app/components/layout/header';
+import { motion } from 'framer-motion';
+import { Navigation } from '@/app/components/layout/navigation';
+import { GitHubHeader } from '@/app/components/layout/github-header';
 import { SearchFiltersComponent } from '@/app/components/search/search-filters';
 import { ProjectCardComponent } from '@/app/components/project/project-card';
 import { ProjectSkeleton } from '@/app/components/ui/loading-skeleton';
 import { ClientOnly } from '@/app/components/ui/client-only';
 import HeroSection from '@/app/components/sections/hero';
 import AboutSection from '@/app/components/sections/about';
+import ResumeSection from '@/app/components/sections/resume';
+import SkillsSection from '@/app/components/sections/skills';
 import ContactSection from '@/app/components/sections/contact';
+import { useReducedMotion, useContainerQuery } from '@/app/lib/responsive';
 import { GitHubUser, ProjectCard, SearchFilters } from '@/app/types';
 
 const fetchGitHubData = async () => {
@@ -21,6 +26,10 @@ const fetchGitHubData = async () => {
 };
 
 export default function HomePage() {
+  const projectsRef = useRef<HTMLElement>(null);
+  const prefersReducedMotion = useReducedMotion();
+  const containerSize = useContainerQuery(projectsRef);
+  
   const [filters, setFilters] = useState<SearchFilters>({
     query: '',
     language: '',
@@ -38,6 +47,16 @@ export default function HomePage() {
     retry: 3,
     retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
+
+  // Adaptive grid columns based on container size and content count
+  const getProjectGridColumns = () => {
+    const count = filteredRepositories.length;
+    if (containerSize.size === 'xs') return 'grid-cols-1';
+    if (containerSize.size === 'sm') return count >= 2 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1';
+    if (containerSize.size === 'md') return count >= 3 ? 'grid-cols-2 md:grid-cols-3' : 'grid-cols-2';
+    if (containerSize.size === 'lg') return count >= 4 ? 'grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'grid-cols-3';
+    return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4';
+  };
 
   const user: GitHubUser | null = data?.user || null;
   
@@ -191,80 +210,142 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header user={user} />
+      <Navigation />
       
       {/* Hero Section */}
-      <HeroSection />
+      <section id="home" className="min-h-screen pt-16 flex items-center">
+        <HeroSection />
+      </section>
       
       {/* About Section */}
-      <AboutSection />
+      <section id="about" className="min-h-screen py-20">
+        <AboutSection />
+      </section>
+      
+      {/* Resume Section */}
+      <section id="resume" className="min-h-screen py-20">
+        <ResumeSection />
+      </section>
+      
+      {/* Skills Section */}
+      <section id="skills" className="min-h-screen py-20">
+        <SkillsSection />
+      </section>
       
       {/* Projects Section */}
-      <section id="projects" className="py-20">
-        <div className="container mx-auto px-4 space-y-8">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">My Projects</h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Explore my latest work and open-source contributions
-            </p>
-          </div>
+      <section id="projects" className="min-h-screen py-20" ref={projectsRef}>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto space-y-8 lg:space-y-12">
+            <motion.div 
+              initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: prefersReducedMotion ? 0.01 : 0.5 }}
+              className="text-center mb-12"
+            >
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">My Projects</h2>
+              <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto">
+                Explore my latest work and open-source contributions
+              </p>
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: prefersReducedMotion ? 0.01 : 0.5, delay: prefersReducedMotion ? 0 : 0.1 }}
+            >
+              <GitHubHeader user={user} />
+            </motion.div>
 
-          <ClientOnly fallback={
-            <div className="space-y-4 p-4 border rounded-lg bg-card">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="md:col-span-2 h-10 bg-gray-200 rounded animate-pulse" />
-                <div className="h-10 bg-gray-200 rounded animate-pulse" />
-                <div className="h-10 bg-gray-200 rounded animate-pulse" />
-              </div>
-              <div className="h-20 bg-gray-200 rounded animate-pulse" />
+            <motion.div
+              initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: prefersReducedMotion ? 0.01 : 0.5, delay: prefersReducedMotion ? 0 : 0.2 }}
+            >
+              <ClientOnly fallback={
+                <div className="space-y-4 p-4 border rounded-lg bg-card">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="lg:col-span-2 h-10 bg-gray-200 rounded animate-pulse" />
+                    <div className="h-10 bg-gray-200 rounded animate-pulse" />
+                    <div className="h-10 bg-gray-200 rounded animate-pulse" />
+                  </div>
+                  <div className="h-20 bg-gray-200 rounded animate-pulse" />
+                </div>
+              }>
+                <SearchFiltersComponent
+                  filters={filters}
+                  onFiltersChange={setFilters}
+                  availableLanguages={availableLanguages}
+                  selectedTags={selectedTags}
+                  onTagSelect={handleTagSelect}
+                  onTagRemove={handleTagRemove}
+                  availableTags={availableTags}
+                />
+              </ClientOnly>
+            </motion.div>
+
+            <div className="space-y-6">
+              <motion.div 
+                initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: prefersReducedMotion ? 0.01 : 0.5, delay: prefersReducedMotion ? 0 : 0.3 }}
+                className="flex items-center justify-between"
+              >
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold">
+                  Projects ({filteredRepositories.length})
+                </h3>
+              </motion.div>
+
+              {isLoading ? (
+                <ProjectSkeleton />
+              ) : (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: prefersReducedMotion ? 0.01 : 0.5, delay: prefersReducedMotion ? 0 : 0.4 }}
+                  className={`grid ${getProjectGridColumns()} gap-4 sm:gap-6 lg:gap-8 @container`}
+                >
+                  {filteredRepositories.map((project, index) => (
+                    <motion.div
+                      key={project.id}
+                      initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ 
+                        duration: prefersReducedMotion ? 0.01 : 0.3, 
+                        delay: prefersReducedMotion ? 0 : index * 0.05 
+                      }}
+                    >
+                      <ProjectCardComponent
+                        project={project}
+                        onGenerateReadme={handleGenerateReadme}
+                      />
+                    </motion.div>
+                  ))}
+                </motion.div>
+              )}
+
+              {!isLoading && filteredRepositories.length === 0 && (
+                <div className="text-center py-12">
+                  <h3 className="text-lg sm:text-xl font-medium mb-2">No repositories found</h3>
+                  <p className="text-sm sm:text-base text-muted-foreground">
+                    Try adjusting your search filters or check back later.
+                  </p>
+                </div>
+              )}
             </div>
-          }>
-            <SearchFiltersComponent
-              filters={filters}
-              onFiltersChange={setFilters}
-              availableLanguages={availableLanguages}
-              selectedTags={selectedTags}
-              onTagSelect={handleTagSelect}
-              onTagRemove={handleTagRemove}
-              availableTags={availableTags}
-            />
-          </ClientOnly>
-
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-2xl font-bold">
-                Projects ({filteredRepositories.length})
-              </h3>
-            </div>
-
-            {isLoading ? (
-              <ProjectSkeleton />
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredRepositories.map((project) => (
-                  <ProjectCardComponent
-                    key={project.id}
-                    project={project}
-                    onGenerateReadme={handleGenerateReadme}
-                  />
-                ))}
-              </div>
-            )}
-
-            {!isLoading && filteredRepositories.length === 0 && (
-              <div className="text-center py-12">
-                <h3 className="text-lg font-medium mb-2">No repositories found</h3>
-                <p className="text-muted-foreground">
-                  Try adjusting your search filters or check back later.
-                </p>
-              </div>
-            )}
           </div>
         </div>
       </section>
 
       {/* Contact Section */}
-      <ContactSection />
+      <section id="contact" className="min-h-screen py-20">
+        <ContactSection />
+      </section>
     </div>
   );
 }

@@ -7,7 +7,8 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { ExternalLink, Star, GitFork, Eye, Calendar, FileText } from 'lucide-react';
 import { ProjectCard } from '@/app/types';
 import { formatDate, formatNumber } from '@/app/lib/utils';
-import { useState } from 'react';
+import { useReducedMotion, useContainerQuery } from '@/app/lib/responsive';
+import { useState, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 interface ProjectCardProps {
@@ -16,6 +17,10 @@ interface ProjectCardProps {
 }
 
 export function ProjectCardComponent({ project, onGenerateReadme }: ProjectCardProps) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const containerSize = useContainerQuery(cardRef);
+  const prefersReducedMotion = useReducedMotion();
+  
   const [generatedReadme, setGeneratedReadme] = useState<string>('');
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -30,12 +35,27 @@ export function ProjectCardComponent({ project, onGenerateReadme }: ProjectCardP
     setIsGenerating(false);
   };
 
+  // Adaptive layout based on container size
+  const getCardLayout = () => {
+    return {
+      statsLayout: containerSize.size === 'xs' ? 'flex-col space-y-2' : 'flex-row space-x-4',
+      buttonLayout: containerSize.size === 'xs' ? 'flex-col space-y-2' : 'flex-row space-x-2',
+      titleSize: containerSize.size === 'xs' ? 'text-lg' : 'text-xl',
+    };
+  };
+
+  const layout = getCardLayout();
+
   return (
-    <Card className="h-full hover:shadow-lg transition-shadow">
-      <CardHeader>
+    <Card 
+      ref={cardRef}
+      className={`h-full @container transition-all duration-300 ${
+        prefersReducedMotion ? 'hover:shadow-lg' : 'hover:shadow-lg hover:-translate-y-1'
+      }`}
+    >      <CardHeader>
         <div className="flex items-start justify-between">
           <div className="space-y-1">
-            <CardTitle className="text-xl">
+            <CardTitle className={layout.titleSize}>
               <a
                 href={project.html_url}
                 target="_blank"
@@ -46,25 +66,24 @@ export function ProjectCardComponent({ project, onGenerateReadme }: ProjectCardP
                 <ExternalLink className="h-4 w-4" />
               </a>
             </CardTitle>
-            <CardDescription className="line-clamp-2">
+            <CardDescription className="line-clamp-2 @sm:line-clamp-3">
               {project.description || 'No description available'}
             </CardDescription>
           </div>
         </div>
       </CardHeader>
-      
-      <CardContent className="space-y-4">
+        <CardContent className="space-y-4">
         {/* Tags */}
-        <div className="flex flex-wrap gap-1">
+        <div className="flex flex-wrap gap-1 @sm:gap-2">
           {project.tags.map((tag) => (
-            <Badge key={tag} variant="secondary" className="text-xs">
+            <Badge key={tag} variant="secondary" className="text-xs @sm:text-sm">
               {tag}
             </Badge>
           ))}
         </div>
 
         {/* Stats */}
-        <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+        <div className={`flex items-center text-sm text-muted-foreground ${layout.statsLayout}`}>
           <div className="flex items-center space-x-1">
             <Star className="h-4 w-4" />
             <span>{formatNumber(project.stargazers_count)}</span>
@@ -82,19 +101,20 @@ export function ProjectCardComponent({ project, onGenerateReadme }: ProjectCardP
         {/* Updated Date */}
         <div className="flex items-center space-x-1 text-sm text-muted-foreground">
           <Calendar className="h-4 w-4" />
-          <span>Updated {formatDate(project.updated_at)}</span>
+          <span className="@sm:inline hidden">Updated </span>
+          <span>{formatDate(project.updated_at)}</span>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex space-x-2">
-          <Button variant="outline" size="sm" asChild>
+        <div className={`${layout.buttonLayout}`}>
+          <Button variant="outline" size="sm" asChild className="@xs:flex-1">
             <a href={project.html_url} target="_blank" rel="noopener noreferrer">
               View Code
             </a>
           </Button>
           
           {project.homepage && (
-            <Button variant="outline" size="sm" asChild>
+            <Button variant="outline" size="sm" asChild className="@xs:flex-1">
               <a href={project.homepage} target="_blank" rel="noopener noreferrer">
                 Live Demo
               </a>
@@ -103,9 +123,9 @@ export function ProjectCardComponent({ project, onGenerateReadme }: ProjectCardP
 
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline" size="sm">
-                <FileText className="h-4 w-4 mr-1" />
-                README
+              <Button variant="outline" size="sm" className="@xs:flex-1">
+                <FileText className="h-4 w-4 @sm:mr-1" />
+                <span className="@sm:inline hidden">README</span>
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">

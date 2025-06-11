@@ -2,6 +2,9 @@
 
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useReducedMotion, useContainerQuery } from '@/app/lib/responsive';
+import { useRef } from 'react';
+import Image from 'next/image';
 
 const skillCategories = [
   {
@@ -73,89 +76,107 @@ const skillCategories = [
 ];
 
 export default function SkillsSection() {
+  const containerRef = useRef<HTMLElement>(null);
+  const containerSize = useContainerQuery(containerRef);
+  const prefersReducedMotion = useReducedMotion();
+  
+  // Adaptive grid columns based on container size
+  const getGridColumns = () => {
+    if (containerSize.size === 'xs') return 'grid-cols-1';
+    if (containerSize.size === 'sm') return 'grid-cols-1 sm:grid-cols-2';
+    if (containerSize.size === 'md') return 'grid-cols-2';
+    if (containerSize.size === 'lg') return 'grid-cols-2 lg:grid-cols-3';
+    return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3';
+  };
+
   return (
-    <section id="skills" className="py-20 bg-muted/50">
-      <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
+    <section id="skills" className="py-20 bg-muted/50" ref={containerRef}>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">        <motion.div
+          initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: prefersReducedMotion ? 0.01 : 0.5 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-bold mb-4">My Skills</h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">My Skills</h2>
+          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto">
             Explore my proficiency in various programming languages, frameworks, and tools used in the tech industry
           </p>
-        </motion.div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {skillCategories.map((category, categoryIndex) => (
-            <motion.div
-              key={category.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: categoryIndex * 0.1 }}
-            >
-              <Card className="h-full hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <CardHeader>
-                  <CardTitle className="text-xl flex items-center">
-                    <div className="w-3 h-3 bg-primary rounded-full mr-3" />
-                    {category.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 gap-3">
-                    {category.skills.map((skill, skillIndex) => (
-                      <motion.div
-                        key={skill.name}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ 
-                          duration: 0.3, 
-                          delay: categoryIndex * 0.1 + skillIndex * 0.05 
-                        }}
-                        whileHover={{ scale: 1.05 }}
-                        className="group cursor-pointer"
-                      >
-                        <div className="flex flex-col items-center p-3 rounded-lg bg-background border border-border hover:border-primary/50 transition-all duration-200">
-                          <img
-                            src={skill.icon}
-                            alt={skill.name}
-                            className="h-8 w-auto mb-2 transition-transform duration-200 group-hover:scale-110"
-                            onError={(e) => {
-                              e.currentTarget.style.display = 'none';
-                            }}
-                          />
-                          <span className="text-xs font-medium text-center leading-tight">
-                            {skill.name}
-                          </span>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+        </motion.div>        <div className="max-w-7xl mx-auto">
+          <div className={`grid ${getGridColumns()} gap-6 lg:gap-8`}>
+            {skillCategories.map((category, categoryIndex) => (              <motion.div
+                key={category.title}
+                initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ 
+                  duration: prefersReducedMotion ? 0.01 : 0.5, 
+                  delay: prefersReducedMotion ? 0 : categoryIndex * 0.1 
+                }}
+                className="h-full"
+              >
+                <Card className={`h-full transition-all duration-300 ${prefersReducedMotion ? 'hover:shadow-lg' : 'hover:shadow-lg hover:-translate-y-1'}`}>
+                  <CardHeader className="pb-4">
+                    <CardTitle className="text-lg sm:text-xl flex items-center">
+                      <div className="w-3 h-3 bg-primary rounded-full mr-3 flex-shrink-0" />
+                      {category.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                      {category.skills.map((skill, skillIndex) => (                        <motion.div
+                          key={skill.name}
+                          initial={{ opacity: 0, scale: prefersReducedMotion ? 1 : 0.8 }}
+                          whileInView={{ opacity: 1, scale: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ 
+                            duration: prefersReducedMotion ? 0.01 : 0.3, 
+                            delay: prefersReducedMotion ? 0 : categoryIndex * 0.1 + skillIndex * 0.05 
+                          }}
+                          whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
+                          className="group cursor-pointer"
+                        >
+                          <div className="flex flex-col items-center p-2 sm:p-3 rounded-lg bg-background border border-border hover:border-primary/50 transition-all duration-200 min-h-[80px] sm:min-h-[90px]">
+                            <div className="flex-1 flex items-center justify-center mb-2">
+                              <Image
+                                src={skill.icon}
+                                alt={`${skill.name} technology logo`}
+                                width={32}
+                                height={32}
+                                className="h-6 w-auto sm:h-8 sm:w-auto transition-transform duration-200 group-hover:scale-110"
+                                unoptimized // For external badge URLs
+                                onError={(e) => {
+                                  e.currentTarget.style.display = 'none';
+                                }}
+                              />
+                            </div>
+                            <span className="text-xs sm:text-sm font-medium text-center leading-tight">
+                              {skill.name}
+                            </span>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
         </div>
 
-        {/* Additional Skills Summary */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
+        {/* Additional Skills Summary */}        <motion.div
+          initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="mt-16 text-center"
+          transition={{ duration: prefersReducedMotion ? 0.01 : 0.5, delay: prefersReducedMotion ? 0 : 0.5 }}
+          className="mt-16"
         >
           <Card className="max-w-4xl mx-auto bg-primary/5 border-primary/20">
-            <CardContent className="p-8">
-              <h3 className="text-xl font-semibold mb-4 text-primary">
+            <CardContent className="p-6 sm:p-8">
+              <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold mb-4 text-primary text-center">
                 Continuous Learning
               </h3>
-              <p className="text-muted-foreground leading-relaxed">
+              <p className="text-sm sm:text-base lg:text-lg text-muted-foreground leading-relaxed text-center">
                 I&apos;m constantly expanding my skill set and staying up-to-date with the latest 
                 technologies in AI/ML, data science, and software development. Currently exploring 
                 advanced topics in generative AI, MLOps, and cloud-native architectures.
