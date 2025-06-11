@@ -30,6 +30,11 @@ export const metadata: Metadata = {
   keywords: ['AI', 'ML', 'Data Engineering', 'Full Stack', 'React', 'Next.js', 'Python'],
   authors: [{ name: 'Ponnuri Aniruddha' }],
   creator: 'Ponnuri Aniruddha',
+  icons: {
+    icon: '/images/iamge.webp',
+    shortcut: '/images/iamge.webp',
+    apple: '/images/iamge.webp',
+  },
   openGraph: {
     title: 'Portfolio - Ponnuri Aniruddha',
     description: 'AI/ML Developer and Data Engineer Portfolio',

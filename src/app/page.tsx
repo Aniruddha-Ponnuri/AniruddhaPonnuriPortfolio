@@ -48,6 +48,13 @@ export default function HomePage() {
     retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 
+  const user: GitHubUser | null = data?.user || null;
+  
+  // Memoize repositories to prevent unnecessary re-renders
+  const repositories: ProjectCard[] = useMemo(() => {
+    return data?.repositories || [];
+  }, [data?.repositories]);
+
   // Adaptive grid columns based on container size and content count
   const getProjectGridColumns = () => {
     const count = filteredRepositories.length;
@@ -58,102 +65,53 @@ export default function HomePage() {
     return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4';
   };
 
-  const user: GitHubUser | null = data?.user || null;
-  
-  // Memoize repositories to prevent unnecessary re-renders
-  const repositories: ProjectCard[] = useMemo(() => {
-    return data?.repositories || [];
-  }, [data?.repositories]);
-
-  // Extract available languages and tags
+  // Get unique languages
   const availableLanguages = useMemo(() => {
-    if (!repositories || repositories.length === 0) return [];
-    const languages = new Set<string>();
-    repositories.forEach(repo => {
-      if (repo.language) languages.add(repo.language);
-      if (repo.languages && typeof repo.languages === 'object') {
-        Object.keys(repo.languages).forEach(lang => languages.add(lang));
-      }
-    });
-    return Array.from(languages).sort();
+    const languages = repositories.flatMap(repo => 
+      repo.languages ? Object.keys(repo.languages) : []
+    );
+    return [...new Set(languages)].sort();
   }, [repositories]);
 
+  // Get unique tags
   const availableTags = useMemo(() => {
-    if (!repositories || repositories.length === 0) return [];
-    const tags = new Set<string>();
-    repositories.forEach(repo => {
-      if (repo.tags && Array.isArray(repo.tags)) {
-        repo.tags.forEach(tag => tags.add(tag));
-      }
-    });
-    return Array.from(tags).sort();
+    const tags = repositories.flatMap(repo => repo.tags || []);
+    return [...new Set(tags)].sort();
   }, [repositories]);
 
-  // Filter and sort repositories
+  // Filter repositories based on search criteria
   const filteredRepositories = useMemo(() => {
-    if (!repositories || repositories.length === 0) return [];
-    
-    const filtered = repositories.filter(repo => {
-      // Text search
-      if (filters.query) {
-        const query = filters.query.toLowerCase();
-        if (!repo.name.toLowerCase().includes(query) && 
-            !repo.description?.toLowerCase().includes(query)) {
-          return false;
-        }
-      }
-
-      // Language filter
-      if (filters.language) {
-        if (repo.language !== filters.language && 
-            !Object.keys(repo.languages || {}).includes(filters.language)) {
-          return false;
-        }
-      }
-
-      // Tag filter
-      if (selectedTags.length > 0) {
-        if (!selectedTags.some(tag => (repo.tags || []).includes(tag))) {
-          return false;
-        }
-      }
-
-      return true;
-    });
-
-    // Sort
-    filtered.sort((a, b) => {
-      let aValue: string | number | Date, bValue: string | number | Date;
+    return repositories.filter(repo => {
+      const matchesQuery = !filters.query || 
+        repo.name.toLowerCase().includes(filters.query.toLowerCase()) ||
+        repo.description?.toLowerCase().includes(filters.query.toLowerCase());
       
-      switch (filters.sortBy) {
+      const matchesLanguage = !filters.language || 
+        (repo.languages && Object.keys(repo.languages).includes(filters.language));
+      
+      const matchesTags = selectedTags.length === 0 || 
+        selectedTags.some(tag => repo.tags?.includes(tag));
+      
+      return matchesQuery && matchesLanguage && matchesTags;
+    }).sort((a, b) => {
+      const { sortBy, sortOrder } = filters;
+      let comparison = 0;
+      
+      switch (sortBy) {
         case 'name':
-          aValue = a.name.toLowerCase();
-          bValue = b.name.toLowerCase();
+          comparison = a.name.localeCompare(b.name);
           break;
         case 'stars':
-          aValue = a.stargazers_count;
-          bValue = b.stargazers_count;
+          comparison = (a.stargazers_count || 0) - (b.stargazers_count || 0);
           break;
         case 'updated':
-          aValue = new Date(a.updated_at);
-          bValue = new Date(b.updated_at);
-          break;
-        case 'created':
-          aValue = new Date(a.created_at);
-          bValue = new Date(b.created_at);
-          break;
         default:
-          return 0;
+          comparison = new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime();
+          break;
       }
-
-      if (filters.sortOrder === 'asc') {
-        return aValue > bValue ? 1 : -1;
-      } else {
-        return aValue < bValue ? 1 : -1;
-      }
+      
+      return sortOrder === 'desc' ? -comparison : comparison;
     });
-
-    return filtered;
   }, [repositories, filters, selectedTags]);
 
   const handleTagSelect = (tag: string) => {
@@ -212,28 +170,28 @@ export default function HomePage() {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      {/* Hero Section */}
-      <section id="home" className="min-h-screen pt-16 flex items-center">
+      {/* Hero Section - Full viewport height */}
+      <section id="home">
         <HeroSection />
       </section>
       
       {/* About Section */}
-      <section id="about" className="min-h-screen py-20">
+      <section id="about">
         <AboutSection />
       </section>
       
       {/* Resume Section */}
-      <section id="resume" className="min-h-screen py-20">
+      <section id="resume">
         <ResumeSection />
       </section>
       
       {/* Skills Section */}
-      <section id="skills" className="min-h-screen py-20">
+      <section id="skills">
         <SkillsSection />
       </section>
       
       {/* Projects Section */}
-      <section id="projects" className="min-h-screen py-20" ref={projectsRef}>
+      <section id="projects" className="py-20" ref={projectsRef}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto space-y-8 lg:space-y-12">
             <motion.div 
@@ -343,7 +301,7 @@ export default function HomePage() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="min-h-screen py-20">
+      <section id="contact">
         <ContactSection />
       </section>
     </div>

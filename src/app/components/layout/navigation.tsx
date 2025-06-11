@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from '@/components/ui/navigation-menu';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -10,6 +11,7 @@ import { useState, useEffect } from 'react';
 import { scrollToSection } from '@/app/lib/scroll';
 import { Menu, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
+import profileImage from '@/app/images/iamge.webp';
 
 export function Navigation() {
   const [activeSection, setActiveSection] = useState('home');
@@ -36,9 +38,7 @@ export function Navigation() {
       const scrolled = window.scrollY;
       const progress = (scrolled / scrollHeight) * 100;
       setScrollProgress(progress);
-    };
-
-    // Intersection Observer for active section
+    };    // Intersection Observer for active section
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -48,8 +48,8 @@ export function Navigation() {
         });
       },
       {
-        threshold: 0.6,
-        rootMargin: '-64px 0px -50% 0px'
+        threshold: 0.3,
+        rootMargin: '-20% 0px -20% 0px',
       }
     );
 
@@ -89,9 +89,7 @@ export function Navigation() {
       />
       
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <motion.div
+        <div className="flex items-center justify-between h-16">          {/* Logo */}          <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             className="flex-shrink-0"
@@ -99,9 +97,18 @@ export function Navigation() {
             <Link 
               href="#home" 
               onClick={(e) => handleNavClick('#home', e)}
-              className="text-xl font-bold text-primary"
+              className="flex items-center space-x-2"
             >
-              PA
+              <div className="relative w-8 h-8 rounded-full overflow-hidden border-2 border-primary/20 hover:border-primary/40 transition-all duration-200">
+                <Image
+                  src={profileImage}
+                  alt="Ponnuri Aniruddha"
+                  fill
+                  className="object-cover"
+                  sizes="32px"
+                />
+              </div>
+              <span className="font-bold text-primary hidden sm:block">Aniruddha</span>
             </Link>
           </motion.div>
 
@@ -173,11 +180,21 @@ export function Navigation() {
                 >
                   <Menu className="h-5 w-5" />
                 </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-64 p-0">
+              </SheetTrigger>              <SheetContent side="right" className="w-64 p-0">
                 <div className="flex flex-col h-full">
                   <div className="flex items-center justify-between p-4 border-b">
-                    <span className="text-lg font-semibold">Menu</span>
+                    <div className="flex items-center space-x-2">
+                      <div className="relative w-6 h-6 rounded-full overflow-hidden border border-primary/20">
+                        <Image
+                          src={profileImage}
+                          alt="Ponnuri Aniruddha"
+                          fill
+                          className="object-cover"
+                          sizes="24px"
+                        />
+                      </div>
+                      <span className="text-lg font-semibold">Menu</span>
+                    </div>
                   </div>
                   <nav className="flex-1 p-4">
                     <ul className="space-y-2">

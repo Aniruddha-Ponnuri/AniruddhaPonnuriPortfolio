@@ -6,11 +6,12 @@ import { ArrowDown, Download } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { scrollToSection } from '@/app/lib/scroll';
 import { useReducedMotion, getAnimationVariants } from '@/app/lib/responsive';
+import Image from 'next/image';
+import profileImage from '@/app/images/bg_2.png';
 
 const roles = [
   "AI/ML Developer",
   "Data Engineer", 
-  "Full Stack Developer",
   "Problem Solver"
 ];
 
@@ -24,7 +25,7 @@ export default function HeroSection() {
       setCurrentRole((prev) => (prev + 1) % roles.length);
     }, prefersReducedMotion ? 5000 : 3000); // Slower transitions for reduced motion
     return () => clearInterval(interval);
-  }, [prefersReducedMotion]);return (
+  }, [prefersReducedMotion]);  return (
     <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0 -z-10">
@@ -35,11 +36,12 @@ export default function HeroSection() {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-center">            {/* Text Content */}
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 xl:gap-16 items-center justify-between text-center lg:text-left min-h-[calc(100vh-8rem)]">
+            {/* Text Content */}
             <motion.div
               {...animationVariants}
               transition={{ duration: prefersReducedMotion ? 0.01 : 0.8, delay: prefersReducedMotion ? 0 : 0.2 }}
-              className="space-y-4 sm:space-y-6 text-center lg:text-left order-2 lg:order-1"
+              className="space-y-4 sm:space-y-6 flex-1 max-w-2xl lg:max-w-3xl"
             >
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -89,9 +91,7 @@ export default function HeroSection() {
               >
                 Passionate about creating innovative solutions using AI/ML technologies 
                 and building scalable data engineering systems that make a difference.
-              </motion.p>
-
-              <motion.div
+              </motion.p>              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.7 }}
@@ -116,21 +116,19 @@ export default function HeroSection() {
                   Download Resume
                 </Button>
               </motion.div>
-            </motion.div>
-
-            {/* Image/Visual Content */}
+            </motion.div>            {/* Image/Visual Content */}
             <motion.div
-              initial={{ opacity: 0, x: 50 }}
+              initial={{ opacity: 0, x: prefersReducedMotion ? 0 : 50 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="relative order-1 lg:order-2"
+              transition={{ duration: prefersReducedMotion ? 0.01 : 0.8, delay: prefersReducedMotion ? 0 : 0.4 }}
+              className="relative flex-shrink-0"
             >
-              <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg mx-auto">
+              <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 mx-auto">
                 <motion.div
-                  animate={{ 
+                  animate={prefersReducedMotion ? {} : { 
                     rotate: 360,
                   }}
-                  transition={{ 
+                  transition={prefersReducedMotion ? {} : { 
                     duration: 20, 
                     repeat: Infinity, 
                     ease: "linear" 
@@ -139,12 +137,18 @@ export default function HeroSection() {
                 />
                 
                 <motion.div
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
                   transition={{ type: "spring", stiffness: 300, damping: 10 }}
                   className="relative z-10 aspect-square rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 p-4 sm:p-6 md:p-8 backdrop-blur-sm border border-border/50"
                 >
-                  <div className="w-full h-full rounded-full bg-gradient-to-br from-background to-muted flex items-center justify-center text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-primary">
-                    A
+                  <div className="w-full h-full rounded-full overflow-hidden bg-gradient-to-br from-background to-muted flex items-center justify-center relative">
+                    <Image
+                      src={profileImage}
+                      alt="Ponnuri Aniruddha - Profile Picture"
+                      fill
+                      className="object-cover rounded-full"
+                      priority
+                    />
                   </div>
                 </motion.div>
               </div>

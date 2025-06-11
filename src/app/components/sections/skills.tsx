@@ -151,7 +151,7 @@ export default function SkillsSection() {
                               />
                             </div>
                             <span className="text-xs sm:text-sm font-medium text-center leading-tight">
-                              {skill.name}
+                              {/* {skill.name} */}
                             </span>
                           </div>
                         </motion.div>

@@ -4,6 +4,9 @@ import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, Mail, MapPin, User } from 'lucide-react';
+import { useReducedMotion } from '@/app/lib/responsive';
+import Image from 'next/image';
+import profileImage from '@/app/images/bg_2.png';
 
 
 const personalInfo = [
@@ -23,14 +26,21 @@ const interests = [
 ];
 
 export default function AboutSection() {
+  const prefersReducedMotion = useReducedMotion();
   return (
-    <section id="about" className="py-20 bg-muted/50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="about" className="py-20 bg-muted/50 relative overflow-hidden">
+      {/* Additional background effects */}
+      <div className="absolute inset-0 -z-5">
+        <div className="absolute top-1/4 right-1/4 w-32 h-32 md:w-48 md:h-48 bg-primary/10 rounded-full mix-blend-multiply filter blur-xl opacity-70" />
+        <div className="absolute bottom-1/3 left-1/4 w-32 h-32 md:w-48 md:h-48 bg-secondary/10 rounded-full mix-blend-multiply filter blur-xl opacity-70" />
+      </div>
+      
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: prefersReducedMotion ? 0.01 : 0.5 }}
           className="text-center mb-16"
         >
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">About Me</h2>
@@ -41,22 +51,25 @@ export default function AboutSection() {
 
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-center">
-            {/* Left Column - Image and Quick Info */}
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
+            {/* Left Column - Image and Quick Info */}            <motion.div
+              initial={{ opacity: 0, x: prefersReducedMotion ? 0 : -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: prefersReducedMotion ? 0.01 : 0.6 }}
               className="space-y-6 lg:space-y-8"
-            >
-              <div className="relative">
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
+            ><div className="relative">                <motion.div
+                  whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
                   transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                  className="aspect-square max-w-xs sm:max-w-sm md:max-w-md mx-auto rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 p-1"
+                  className="aspect-square max-w-xs sm:max-w-sm md:max-w-md mx-auto rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 p-1 overflow-hidden"
                 >
-                  <div className="w-full h-full rounded-2xl bg-background flex items-center justify-center text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold text-primary">
-                    AP
+                  <div className="w-full h-full rounded-2xl bg-background overflow-hidden relative">
+                    <Image
+                      src={profileImage}
+                      alt="Ponnuri Aniruddha"
+                      fill
+                      className="object-cover"
+                      priority
+                    />
                   </div>
                 </motion.div>
               </div>
@@ -65,13 +78,15 @@ export default function AboutSection() {
                 <CardContent className="p-4 sm:p-6 space-y-3 sm:space-y-4">
                   {personalInfo.map((info, index) => {
                     const Icon = info.icon;
-                    return (
-                      <motion.div
+                    return (                      <motion.div
                         key={info.label}
-                        initial={{ opacity: 0, x: -20 }}
+                        initial={{ opacity: 0, x: prefersReducedMotion ? 0 : -20 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                        transition={{ 
+                          duration: prefersReducedMotion ? 0.01 : 0.5, 
+                          delay: prefersReducedMotion ? 0 : index * 0.1 
+                        }}
                         className="flex items-center space-x-3"
                       >
                         <Icon className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
@@ -86,12 +101,11 @@ export default function AboutSection() {
               </Card>
             </motion.div>
 
-            {/* Right Column - Description and Interests */}
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
+            {/* Right Column - Description and Interests */}            <motion.div
+              initial={{ opacity: 0, x: prefersReducedMotion ? 0 : 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: prefersReducedMotion ? 0.01 : 0.6 }}
               className="space-y-6 lg:space-y-8"
             >
               <div className="space-y-4 lg:space-y-6">
@@ -121,13 +135,15 @@ export default function AboutSection() {
               <div className="space-y-4 lg:space-y-6">
                 <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold">My Interests</h3>
                 <div className="flex flex-wrap gap-2 sm:gap-3">
-                  {interests.map((interest, index) => (
-                    <motion.div
+                  {interests.map((interest, index) => (                    <motion.div
                       key={interest}
-                      initial={{ opacity: 0, scale: 0.8 }}
+                      initial={{ opacity: 0, scale: prefersReducedMotion ? 1 : 0.8 }}
                       whileInView={{ opacity: 1, scale: 1 }}
                       viewport={{ once: true }}
-                      transition={{ duration: 0.3, delay: index * 0.1 }}
+                      transition={{ 
+                        duration: prefersReducedMotion ? 0.01 : 0.3, 
+                        delay: prefersReducedMotion ? 0 : index * 0.1 
+                      }}
                     >
                       <Badge variant="secondary" className="px-2 py-1 sm:px-3 sm:py-1 text-xs sm:text-sm">
                         {interest}

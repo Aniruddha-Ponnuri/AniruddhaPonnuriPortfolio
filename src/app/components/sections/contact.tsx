@@ -83,28 +83,45 @@ export default function ContactSection() {
             The greatest gift you can give someone is your time, your attention, your love, and your presence.
             Let&apos;s connect and discuss opportunities!
           </p>
-        </motion.div>
-
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16">
-            {/* Contact Information */}
+        </motion.div>        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+            {/* Google Maps - Left Side */}
             <motion.div
               initial={{ opacity: 0, x: prefersReducedMotion ? 0 : -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: prefersReducedMotion ? 0.01 : 0.6 }}
-              className="space-y-6 lg:space-y-8"
+              className="lg:col-span-4"
             >
-              <div>
-                <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold mb-4 lg:mb-6">Get In Touch</h3>
-                <p className="text-sm sm:text-base lg:text-lg text-muted-foreground mb-6 lg:mb-8 leading-relaxed">
+              <div className="mb-6">
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold mb-4">Get In Touch</h3>
+                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
                   I&apos;m always open to discussing new opportunities, interesting projects, 
                   and potential collaborations. Whether you have a question or just want 
                   to say hi, feel free to reach out!
                 </p>
               </div>
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+              <div className="rounded-lg overflow-hidden shadow-lg h-[300px] sm:h-[350px] lg:h-[400px]">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d124378.0459849938!2d80.12661197303541!3d13.047512418768992!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5265ea4f7d3361%3A0x6e61a70b6863d433!2sChennai%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1709738681575!5m2!1sen!2sin"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
+            </motion.div>            {/* Contact Information - Middle (2x4 Grid) */}
+            <motion.div
+              initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: prefersReducedMotion ? 0.01 : 0.6, delay: prefersReducedMotion ? 0 : 0.2 }}
+              className="lg:col-span-4"
+            >
+              <div className="grid grid-cols-2 gap-4 h-full">
                 {contactInfo.map((info, index) => {
                   const Icon = info.icon;
                   return (
@@ -117,18 +134,19 @@ export default function ContactSection() {
                         duration: prefersReducedMotion ? 0.01 : 0.3, 
                         delay: prefersReducedMotion ? 0 : index * 0.1 
                       }}
+                      className="h-full"
                     >
-                      <Card className="h-full hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                        <CardContent className="p-4 sm:p-6 text-center">
-                          <div className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 rounded-lg mb-3 sm:mb-4">
-                            <Icon className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+                      <Card className="h-full hover:shadow-md transition-all duration-300 hover:-translate-y-1 flex flex-col">
+                        <CardContent className="p-3 sm:p-4 text-center flex-1 flex flex-col justify-center">
+                          <div className="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 bg-primary/10 rounded-lg mb-2 sm:mb-3 mx-auto">
+                            <Icon className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                           </div>
-                          <h4 className="font-semibold mb-2 text-sm sm:text-base">{info.title}</h4>
+                          <h4 className="font-semibold mb-1 sm:mb-2 text-xs sm:text-sm">{info.title}</h4>
                           <a
                             href={info.link}
                             target={info.link.startsWith('http') ? '_blank' : undefined}
                             rel={info.link.startsWith('http') ? 'noopener noreferrer' : undefined}
-                            className="text-xs sm:text-sm lg:text-base text-muted-foreground hover:text-primary transition-colors duration-200 break-words"
+                            className="text-xs text-muted-foreground hover:text-primary transition-colors duration-200 break-words leading-tight"
                           >
                             {info.content}
                           </a>
@@ -136,44 +154,23 @@ export default function ContactSection() {
                       </Card>
                     </motion.div>
                   );
-                })}
-              </div>
-
-              {/* Embedded Map */}
-              <motion.div
-                initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: prefersReducedMotion ? 0.01 : 0.5, delay: prefersReducedMotion ? 0 : 0.4 }}
-                className="rounded-lg overflow-hidden shadow-lg"
-              >
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d124378.0459849938!2d80.12661197303541!3d13.047512418768992!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5265ea4f7d3361%3A0x6e61a70b6863d433!2sChennai%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1709738681575!5m2!1sen!2sin"
-                  width="100%"
-                  height="200"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className="sm:h-[250px] lg:h-[300px]"
-                />
-              </motion.div>
-            </motion.div>
-            
-            {/* Contact Form */}
+                })}              </div>
+            </motion.div>            
+            {/* Contact Form - Right Side */}
             <motion.div
               initial={{ opacity: 0, x: prefersReducedMotion ? 0 : 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: prefersReducedMotion ? 0.01 : 0.6 }}
+              transition={{ duration: prefersReducedMotion ? 0.01 : 0.6, delay: prefersReducedMotion ? 0 : 0.4 }}
+              className="lg:col-span-4"
             >
-              <Card className="shadow-lg">
+              <Card className="shadow-lg h-full">
                 <CardHeader className="pb-4 sm:pb-6">
                   <CardTitle className="text-lg sm:text-xl lg:text-2xl">Send Me a Message</CardTitle>
                 </CardHeader>
                 <CardContent className="px-4 sm:px-6">
                   <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4">
                       <div>
                         <Input
                           name="name"
@@ -215,8 +212,8 @@ export default function ContactSection() {
                         value={formData.message}
                         onChange={handleInputChange}
                         required
-                        rows={5}
-                        className="resize-none text-sm sm:text-base sm:min-h-[120px] lg:min-h-[140px]"
+                        rows={4}
+                        className="resize-none text-sm sm:text-base"
                       />
                     </div>
                     
