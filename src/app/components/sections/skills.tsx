@@ -58,8 +58,8 @@ const skillCategories = [
       { name: 'MongoDB', icon: 'https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=flat&logo=mongodb&logoColor=white' },
       { name: 'SQLite', icon: 'https://img.shields.io/badge/sqlite-%2307405e.svg?style=flat&logo=sqlite&logoColor=white' },
       { name: 'SQL Server', icon: 'https://img.shields.io/badge/Microsoft%20SQL%20Server-CC2927?style=flat&logo=microsoft%20sql%20server&logoColor=white' },
-      { name: 'PostgreSQL', icon: 'https://img.shields.io/badge/postgresql-%23316192.svg?style=flat&logo=postgresql&logoColor=white' },
-      { name: 'Redis', icon: 'https://img.shields.io/badge/redis-%23DD0031.svg?style=flat&logo=redis&logoColor=white' },
+      // { name: 'PostgreSQL', icon: 'https://img.shields.io/badge/postgresql-%23316192.svg?style=flat&logo=postgresql&logoColor=white' },
+      // { name: 'Redis', icon: 'https://img.shields.io/badge/redis-%23DD0031.svg?style=flat&logo=redis&logoColor=white' },
     ],
   },
   {
@@ -102,7 +102,10 @@ export default function SkillsSection() {
           <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto">
             Explore my proficiency in various programming languages, frameworks, and tools used in the tech industry
           </p>
-        </motion.div>        <div className="max-w-7xl mx-auto">
+        </motion.div>
+        
+        {/* Skills Grid Section */}
+        <div className="max-w-7xl mx-auto">
           <div className={`grid ${getGridColumns()} gap-6 lg:gap-8`}>
             {skillCategories.map((category, categoryIndex) => (              <motion.div
                 key={category.title}
@@ -159,31 +162,10 @@ export default function SkillsSection() {
                     </div>
                   </CardContent>
                 </Card>
-              </motion.div>
-            ))}
+              </motion.div>            ))}
           </div>
         </div>
 
-        {/* Additional Skills Summary */}        <motion.div
-          initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: prefersReducedMotion ? 0.01 : 0.5, delay: prefersReducedMotion ? 0 : 0.5 }}
-          className="mt-16"
-        >
-          <Card className="max-w-4xl mx-auto bg-primary/5 border-primary/20">
-            <CardContent className="p-6 sm:p-8">
-              <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold mb-4 text-primary text-center">
-                Continuous Learning
-              </h3>
-              <p className="text-sm sm:text-base lg:text-lg text-muted-foreground leading-relaxed text-center">
-                I&apos;m constantly expanding my skill set and staying up-to-date with the latest 
-                technologies in AI/ML, data science, and software development. Currently exploring 
-                advanced topics in generative AI, MLOps, and cloud-native architectures.
-              </p>
-            </CardContent>
-          </Card>
-        </motion.div>
       </div>
     </section>
   );

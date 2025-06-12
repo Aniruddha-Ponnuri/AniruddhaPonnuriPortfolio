@@ -67,12 +67,6 @@ export default function Footer() {
           <div className="flex items-center justify-center space-x-2 text-sm text-muted-foreground">
             <span>© {new Date().getFullYear()} Ponnuri Aniruddha. All rights reserved.</span>
           </div>
-
-          {/* Additional Info */}
-          <div className="text-xs text-muted-foreground max-w-md mx-auto">
-            Aspiring Data Engineer & AI/ML Developer passionate about creating 
-            innovative solutions and contributing to open-source projects.
-          </div>
         </motion.div>
       </div>
     </footer>
