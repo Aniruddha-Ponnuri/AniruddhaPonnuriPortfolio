@@ -12,7 +12,7 @@ const experiences = [
     title: 'AI & Full Stack Research Intern',
     company: 'EDCULTS CONSULTING PRIVATE LIMITED',
     location: 'Remote',
-    period: 'May 2024 — August 2024',
+    period: 'May 2024 — March 2025',
     description: 'Worked on Gen-AI projects, including development and fine-tuning of advanced models like GPT and LLaMA. Contributed to the design, development, and deployment of AI-driven applications for natural language processing, content generation, and automated decision-making.',
     technologies: ['LLM', 'Python', 'TensorFlow', 'Groq', 'OpenAI GPT'],
   },
@@ -74,7 +74,7 @@ export default function ResumeSection() {
             deep learning and AI competencies to solve complex challenges in technology-driven environments.
           </p>
           <Button
-            onClick={() => window.open('https://drive.google.com/file/d/1XKNU2ye7CswK6TDkh4Pyz9eh6Q4IPfwN/view?usp=sharing', '_blank')}
+            onClick={() => window.open('https://drive.google.com/file/d/1cFO0RB85TaYA9BzHaiygSbQKS_NTPO7T/view?usp=drive_link', '_blank')}
             className="group interaction-enhanced text-sm sm:text-base px-6 py-3 sm:px-8 sm:py-4"
             size="lg"
           >
