@@ -109,7 +109,7 @@ export default function HeroSection() {
                 <Button
                   variant="outline"
                   size="lg"
-                  onClick={() => window.open('https://drive.google.com/file/d/1XKNU2ye7CswK6TDkh4Pyz9eh6Q4IPfwN/view?usp=sharing', '_blank')}
+                  onClick={() => window.open('https://drive.google.com/file/d/11-GWxkz9SnZYHDrGXOaK03xjWDR_vHWb/view?usp=drivesdk', '_blank')}
                   className="group w-full sm:w-auto text-sm sm:text-base px-6 py-3 sm:px-8 sm:py-4"
                 >
                   <Download className="mr-2 h-4 w-4 transition-transform group-hover:translate-y-1" />
