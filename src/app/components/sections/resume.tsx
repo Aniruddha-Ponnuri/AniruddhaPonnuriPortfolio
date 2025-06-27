@@ -74,7 +74,7 @@ export default function ResumeSection() {
             deep learning and AI competencies to solve complex challenges in technology-driven environments.
           </p>
           <Button
-            onClick={() => window.open('https://drive.google.com/file/d/1cFO0RB85TaYA9BzHaiygSbQKS_NTPO7T/view?usp=drive_link', '_blank')}
+            onClick={() => window.open('https://drive.google.com/file/d/11-GWxkz9SnZYHDrGXOaK03xjWDR_vHWb/view?usp=drivesdk', '_blank')}
             className="group interaction-enhanced text-sm sm:text-base px-6 py-3 sm:px-8 sm:py-4"
             size="lg"
           >
