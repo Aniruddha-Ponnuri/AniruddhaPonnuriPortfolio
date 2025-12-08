@@ -3,6 +3,7 @@ import { Inter, Inter_Tight, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/app/components/theme-provider';
 import { QueryProvider } from '@/app/components/query-provider';
+import { ErrorBoundary } from '@/app/components/ui/error-boundary';
 import Footer from '@/app/components/layout/footer';
 
 // Variable fonts for better text scaling and performance
@@ -25,31 +26,54 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Portfolio - Ponnuri Aniruddha',
-  description: 'AI/ML Developer and Data Engineer Portfolio',
-  keywords: ['AI', 'ML', 'Data Engineering', 'Full Stack', 'React', 'Next.js', 'Python'],
-  authors: [{ name: 'Ponnuri Aniruddha' }],
+  title: {
+    default: 'Ponnuri Aniruddha - AI/ML Developer & Data Engineer',
+    template: '%s | Ponnuri Aniruddha'
+  },
+  description: 'Aspiring AI/ML Developer and Data Engineer specializing in building innovative solutions using machine learning, data engineering, and modern web technologies. View my projects and experience.',
+  keywords: ['AI', 'ML', 'Machine Learning', 'Data Engineering', 'Full Stack Developer', 'React', 'Next.js', 'Python', 'TypeScript', 'Portfolio', 'Chennai', 'India'],
+  authors: [{ name: 'Ponnuri Aniruddha', url: 'https://aniruddhaponnuri.vercel.app' }],
   creator: 'Ponnuri Aniruddha',
+  metadataBase: new URL('https://aniruddhaponnuri.vercel.app'),
+  alternates: {
+    canonical: '/',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   icons: {
-    icon: '/images/iamge.webp',
-    shortcut: '/images/iamge.webp',
-    apple: '/images/iamge.webp',
+    icon: '/images/image.webp',
+    shortcut: '/images/image.webp',
+    apple: '/images/image.webp',
   },
   openGraph: {
-    title: 'Portfolio - Ponnuri Aniruddha',
-    description: 'AI/ML Developer and Data Engineer Portfolio',
-    type: 'website',
+    title: 'Ponnuri Aniruddha - AI/ML Developer & Data Engineer',
+    description: 'Aspiring AI/ML Developer and Data Engineer specializing in building innovative solutions. Explore my portfolio of projects in machine learning, data engineering, and web development.',
+    url: 'https://aniruddhaponnuri.vercel.app',
+    siteName: 'Ponnuri Aniruddha Portfolio',
     locale: 'en_US',
+    type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Portfolio - Ponnuri Aniruddha',
-    description: 'AI/ML Developer and Data Engineer Portfolio',
+    title: 'Ponnuri Aniruddha - AI/ML Developer & Data Engineer',
+    description: 'Aspiring AI/ML Developer and Data Engineer. View my portfolio of AI/ML and data engineering projects.',
   },
   viewport: {
     width: 'device-width',
     initialScale: 1,
     maximumScale: 5,
+  },
+  verification: {
+    google: 'YOUR_GOOGLE_SITE_VERIFICATION_CODE', 
   },
 };
 
@@ -67,10 +91,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <QueryProvider>
-            <main className="relative">{children}</main>
-            <Footer />
-          </QueryProvider>
+          <ErrorBoundary>
+            <QueryProvider>
+              <main className="relative">{children}</main>
+              <Footer />
+            </QueryProvider>
+          </ErrorBoundary>
         </ThemeProvider>
       </body>
     </html>

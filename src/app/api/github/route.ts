@@ -1,6 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getGitHubUser, getGitHubRepos, enrichRepoData } from '@/app/lib/github';
+import { unstable_cache } from 'next/cache';
 
+const getGitHubData = unstable_cache(
+  async (username: string) => {
+    const [user, repos] = await Promise.all([
+      getGitHubUser(username),
+      getGitHubRepos(username),
+    ]);
+
+    const enrichedRepos = await enrichRepoData(repos, username);
+
+    return {
+      user,
+      repositories: enrichedRepos,
+    };
+  },
+  ['github-data'],
+  { revalidate: 3600 }
+);
 
 export async function GET(request: NextRequest) {
   try {
@@ -11,17 +29,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Username is required' }, { status: 400 });
     }
 
-    const [user, repos] = await Promise.all([
-      getGitHubUser(username),
-      getGitHubRepos(username),
-    ]);
+    const data = await getGitHubData(username);
 
-    const enrichedRepos = await enrichRepoData(repos, username);
-
-    return NextResponse.json({
-      user,
-      repositories: enrichedRepos,
-    });
+    return NextResponse.json(data);
   } catch (error) {
     console.error('GitHub API error:', error);
     return NextResponse.json(
