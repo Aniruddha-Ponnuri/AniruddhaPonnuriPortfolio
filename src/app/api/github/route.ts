@@ -46,7 +46,9 @@ export async function GET(request: NextRequest) {
 
   try {
     const searchParams = request.nextUrl.searchParams;
-    const username = searchParams.get('username') || process.env.NEXT_PUBLIC_GITHUB_USERNAME;
+    // Trim whitespace from username to handle accidental spaces
+    const rawUsername = searchParams.get('username') || process.env.NEXT_PUBLIC_GITHUB_USERNAME;
+    const username = rawUsername?.trim();
 
     log.info('GET', 'Request received', { requestId, username: username || 'not provided' });
 

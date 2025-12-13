@@ -11,9 +11,12 @@ import profileImage from '@/app/images/bg_2.png';
 
 const roles = [
   "AI/ML Developer",
-  "Data Engineer", 
+  "Data Engineer",
   "Problem Solver"
 ];
+
+// Resume URL - configure via environment variable for easy updates
+const RESUME_URL = process.env.NEXT_PUBLIC_RESUME_URL || 'https://drive.google.com/file/d/11-GWxkz9SnZYHDrGXOaK03xjWDR_vHWb/view?usp=drivesdk';
 
 export default function HeroSection() {
   const [currentRole, setCurrentRole] = useState(0);
@@ -109,7 +112,7 @@ export default function HeroSection() {
                 <Button
                   variant="outline"
                   size="lg"
-                  onClick={() => window.open('https://drive.google.com/file/d/11-GWxkz9SnZYHDrGXOaK03xjWDR_vHWb/view?usp=drivesdk', '_blank')}
+                  onClick={() => window.open(RESUME_URL, '_blank')}
                   className="group w-full sm:w-auto text-sm sm:text-base px-6 py-3 sm:px-8 sm:py-4"
                 >
                   <Download className="mr-2 h-4 w-4 transition-transform group-hover:translate-y-1" />
