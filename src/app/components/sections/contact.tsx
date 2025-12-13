@@ -30,8 +30,8 @@ const contactInfo = [
   {
     icon: Globe,
     title: 'Website',
-    content: 'Portfolio',
-    link: 'aniruddha-ponnuri-portfolio.vercel.app',
+    content: 'aniruddhaponnuri.vercel.app',
+    link: 'https://aniruddhaponnuri.vercel.app',
   },
 ];
 
@@ -111,6 +111,8 @@ export default function ContactSection() {
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
+                  title="Location map showing Chennai, Tamil Nadu, India"
+                  aria-label="Google Maps embed showing location in Chennai"
                 />
               </div>
             </motion.div>            {/* Contact Information - Middle (2x4 Grid) */}
@@ -169,49 +171,63 @@ export default function ContactSection() {
                   <CardTitle className="text-lg sm:text-xl lg:text-2xl">Send Me a Message</CardTitle>
                 </CardHeader>
                 <CardContent className="px-4 sm:px-6">
-                  <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+                  <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6" aria-label="Contact form">
                     <div className="grid grid-cols-1 gap-4">
                       <div>
+                        <label htmlFor="contact-name" className="sr-only">Your Name</label>
                         <Input
+                          id="contact-name"
                           name="name"
                           placeholder="Your Name"
                           value={formData.name}
                           onChange={handleInputChange}
                           required
+                          aria-required="true"
+                          autoComplete="name"
                           className="h-10 sm:h-12 text-sm sm:text-base"
                         />
                       </div>
                       <div>
+                        <label htmlFor="contact-email" className="sr-only">Your Email</label>
                         <Input
+                          id="contact-email"
                           name="email"
                           type="email"
                           placeholder="Your Email"
                           value={formData.email}
                           onChange={handleInputChange}
                           required
+                          aria-required="true"
+                          autoComplete="email"
                           className="h-10 sm:h-12 text-sm sm:text-base"
                         />
                       </div>
                     </div>
-                    
+
                     <div>
+                      <label htmlFor="contact-subject" className="sr-only">Subject</label>
                       <Input
+                        id="contact-subject"
                         name="subject"
                         placeholder="Subject"
                         value={formData.subject}
                         onChange={handleInputChange}
                         required
+                        aria-required="true"
                         className="h-10 sm:h-12 text-sm sm:text-base"
                       />
                     </div>
-                    
+
                     <div>
+                      <label htmlFor="contact-message" className="sr-only">Your Message</label>
                       <Textarea
+                        id="contact-message"
                         name="message"
                         placeholder="Your Message"
                         value={formData.message}
                         onChange={handleInputChange}
                         required
+                        aria-required="true"
                         rows={4}
                         className="resize-none text-sm sm:text-base"
                       />

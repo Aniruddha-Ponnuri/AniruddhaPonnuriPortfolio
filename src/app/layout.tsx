@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter, Inter_Tight, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/app/components/theme-provider';
@@ -67,14 +67,15 @@ export const metadata: Metadata = {
     title: 'Ponnuri Aniruddha - AI/ML Developer & Data Engineer',
     description: 'Aspiring AI/ML Developer and Data Engineer. View my portfolio of AI/ML and data engineering projects.',
   },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 5,
-  },
-  verification: {
-    google: 'YOUR_GOOGLE_SITE_VERIFICATION_CODE', 
-  },
+  // verification: {
+  //   google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+  // },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 export default function RootLayout({

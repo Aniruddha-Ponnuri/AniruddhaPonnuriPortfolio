@@ -484,7 +484,7 @@ export function isHighDPI(): boolean {
   return window.devicePixelRatio > 1.5;
 }
 
-export default {
+const responsiveUtils = {
   breakpoints,
   containerSizes,
   spacing,
@@ -499,3 +499,5 @@ export default {
   responsiveContainer,
   responsiveTextAlign
 };
+
+export default responsiveUtils;
