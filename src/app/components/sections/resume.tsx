@@ -9,20 +9,20 @@ import { useReducedMotion } from '@/app/lib/responsive';
 
 const experiences = [
   {
-    title: 'AI & Full Stack Research Intern',
-    company: 'EDCULTS CONSULTING PRIVATE LIMITED',
-    location: 'Remote',
-    period: 'May 2024 — March 2025',
-    description: 'Worked on Gen-AI projects, including development and fine-tuning of advanced models like GPT and LLaMA. Contributed to the design, development, and deployment of AI-driven applications for natural language processing, content generation, and automated decision-making.',
-    technologies: ['LLM', 'Python', 'TensorFlow', 'Groq', 'OpenAI GPT'],
+    title: 'Machine Learning Intern',
+    company: 'SEAGATE TECHNOLOGY',
+    location: 'Pune, India',
+    period: 'July 2025 — Present',
+    description: 'Developed and deployed 6+ organizational AI copilots using multi-agent orchestration with LangChain, enabling autonomous task execution and contextual reasoning across enterprise workflows. Designed a feedback microservice and closed-loop evaluation pipeline to capture and analyze user feedback. Engineered a high-throughput authentication middleware validating JWT and custom Argon2ID tokens, handling 10K+ requests per minute with in-memory caching to reduce latency and improve reliability. Constructed feature engineering and model evaluation pipelines for RMA fraud detection, benchmarking traditional ML models against GenAI-based approaches for anomaly detection.',
+    technologies: ['LangChain', 'Multi-Agent Orchestration', 'JWT', 'Argon2ID', 'GenAI', 'Feature Engineering', 'Model Evaluation', 'Python'],
   },
   {
-    title: 'Student Research',
-    company: 'SRMIST',
-    location: 'Chennai',
-    period: '2021 — Present',
-    description: 'Working on multiple research projects including AI-Driven Personalized Intervention Strategies for Tackling Child Obesity and Leaf Chart for Papaya Plant using KNN algorithm.',
-    technologies: ['Flutter', 'KNN', 'Image Analysis', 'Mobile Development'],
+    title: 'AI and Full Stack Research Intern',
+    company: 'EDCULTS CONSULTING PRIVATE LIMITED',
+    location: 'Remote, India',
+    period: 'June 2024 — March 2025',
+    description: 'Fine-tuned Large Language Models (GPT-3.5, LLaMA) for NLP tasks including classification, summarization, and retrieval, achieving >96% F1-score performance. Implemented data processing pipelines and model inference APIs, enabling scalable machine learning applications.',
+    technologies: ['GPT-3.5', 'LLaMA', 'NLP', 'Fine-Tuning', 'Python', 'FastAPI', 'Model Inference'],
   },
 ];
 
