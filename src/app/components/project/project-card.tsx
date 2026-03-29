@@ -106,16 +106,18 @@ export function ProjectCardComponent({ project, onGenerateReadme }: ProjectCardP
         </div>
 
         {/* Action Buttons */}
-        <div className={`${layout.buttonLayout}`}>
-          <Button variant="outline" size="sm" asChild className="@xs:flex-1">
+        <div className={`flex flex-wrap gap-2 ${layout.buttonLayout}`}>
+          <Button variant="outline" size="sm" asChild className="flex-1 min-w-[120px]">
             <a href={project.html_url} target="_blank" rel="noopener noreferrer">
+              <ExternalLink className="h-4 w-4 mr-2" />
               View Code
             </a>
           </Button>
           
           {project.homepage && (
-            <Button variant="outline" size="sm" asChild className="@xs:flex-1">
+            <Button variant="outline" size="sm" asChild className="flex-1 min-w-[120px]">
               <a href={project.homepage} target="_blank" rel="noopener noreferrer">
+                <ExternalLink className="h-4 w-4 mr-2" />
                 Live Demo
               </a>
             </Button>
@@ -123,23 +125,34 @@ export function ProjectCardComponent({ project, onGenerateReadme }: ProjectCardP
 
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline" size="sm" className="@xs:flex-1">
-                <FileText className="h-4 w-4 @sm:mr-1" />
-                <span className="@sm:inline hidden">README</span>
+              <Button variant="default" size="sm" className="flex-1 min-w-[120px]">
+                <FileText className="h-4 w-4 mr-2" />
+                README
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-[95vw] sm:max-w-4xl max-h-[85vh] sm:max-h-[80vh] overflow-hidden flex flex-col p-4 sm:p-6">
               <DialogHeader>
-                <DialogTitle className="text-base sm:text-lg">{project.name} - README</DialogTitle>
+                <DialogTitle className="text-base sm:text-lg pr-8">{project.name} - README</DialogTitle>
                 <DialogDescription className="text-xs sm:text-sm">
                   Interactive README for this repository
                 </DialogDescription>
               </DialogHeader>
               
-              <div className="flex-1 overflow-y-auto space-y-4 mt-4 pr-2 -mr-2">
+              <div className="flex-1 overflow-y-auto space-y-4 mt-4 pr-2">
                 {project.readme ? (
-                  <div className="prose prose-xs sm:prose-sm max-w-none dark:prose-invert prose-headings:scroll-mt-20 prose-p:leading-relaxed prose-pre:max-w-full prose-pre:overflow-x-auto">
-                    <ReactMarkdown>{project.readme}</ReactMarkdown>
+                  <div className="prose prose-xs sm:prose-sm max-w-none dark:prose-invert prose-headings:scroll-mt-20 prose-p:leading-relaxed prose-pre:max-w-full prose-pre:overflow-x-auto prose-img:rounded-lg prose-img:shadow-md">
+                    <ReactMarkdown
+                      components={{
+                        // Sanitize links
+                        a: ({ ...props }) => (
+                          <a {...props} target="_blank" rel="noopener noreferrer" />
+                        ),
+                        // Prevent script tags
+                        script: () => null,
+                      }}
+                    >
+                      {project.readme}
+                    </ReactMarkdown>
                   </div>
                 ) : (
                   <div className="text-center space-y-4 py-8">
@@ -160,8 +173,19 @@ export function ProjectCardComponent({ project, onGenerateReadme }: ProjectCardP
                 {generatedReadme && (
                   <div className="mt-6 border-t pt-4">
                     <h3 className="text-base sm:text-lg font-semibold mb-2">AI-Generated README</h3>
-                    <div className="prose prose-xs sm:prose-sm max-w-none dark:prose-invert prose-headings:scroll-mt-20 prose-p:leading-relaxed prose-pre:max-w-full prose-pre:overflow-x-auto">
-                      <ReactMarkdown>{generatedReadme}</ReactMarkdown>
+                    <div className="prose prose-xs sm:prose-sm max-w-none dark:prose-invert prose-headings:scroll-mt-20 prose-p:leading-relaxed prose-pre:max-w-full prose-pre:overflow-x-auto prose-img:rounded-lg prose-img:shadow-md">
+                      <ReactMarkdown
+                        components={{
+                          // Sanitize links
+                          a: ({ ...props }) => (
+                            <a {...props} target="_blank" rel="noopener noreferrer" />
+                          ),
+                          // Prevent script tags
+                          script: () => null,
+                        }}
+                      >
+                        {generatedReadme}
+                      </ReactMarkdown>
                     </div>
                   </div>
                 )}
