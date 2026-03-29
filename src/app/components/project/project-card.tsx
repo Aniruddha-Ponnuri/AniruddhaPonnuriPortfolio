@@ -128,27 +128,29 @@ export function ProjectCardComponent({ project, onGenerateReadme }: ProjectCardP
                 <span className="@sm:inline hidden">README</span>
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+            <DialogContent className="max-w-[95vw] sm:max-w-4xl max-h-[85vh] sm:max-h-[80vh] overflow-hidden flex flex-col p-4 sm:p-6">
               <DialogHeader>
-                <DialogTitle>{project.name} - README</DialogTitle>
-                <DialogDescription>
+                <DialogTitle className="text-base sm:text-lg">{project.name} - README</DialogTitle>
+                <DialogDescription className="text-xs sm:text-sm">
                   Interactive README for this repository
                 </DialogDescription>
               </DialogHeader>
               
-              <div className="space-y-4">
+              <div className="flex-1 overflow-y-auto space-y-4 mt-4 pr-2 -mr-2">
                 {project.readme ? (
-                  <div className="prose prose-sm max-w-none">
+                  <div className="prose prose-xs sm:prose-sm max-w-none dark:prose-invert prose-headings:scroll-mt-20 prose-p:leading-relaxed prose-pre:max-w-full prose-pre:overflow-x-auto">
                     <ReactMarkdown>{project.readme}</ReactMarkdown>
                   </div>
                 ) : (
-                  <div className="text-center space-y-4">
-                    <p className="text-muted-foreground">
+                  <div className="text-center space-y-4 py-8">
+                    <p className="text-muted-foreground text-sm sm:text-base">
                       No README found. Generate one using AI?
                     </p>
                     <Button 
                       onClick={handleGenerateReadme}
                       disabled={isGenerating}
+                      size="sm"
+                      className="w-full sm:w-auto"
                     >
                       {isGenerating ? 'Generating...' : 'Generate README with AI'}
                     </Button>
@@ -157,8 +159,8 @@ export function ProjectCardComponent({ project, onGenerateReadme }: ProjectCardP
                 
                 {generatedReadme && (
                   <div className="mt-6 border-t pt-4">
-                    <h3 className="text-lg font-semibold mb-2">AI-Generated README</h3>
-                    <div className="prose prose-sm max-w-none">
+                    <h3 className="text-base sm:text-lg font-semibold mb-2">AI-Generated README</h3>
+                    <div className="prose prose-xs sm:prose-sm max-w-none dark:prose-invert prose-headings:scroll-mt-20 prose-p:leading-relaxed prose-pre:max-w-full prose-pre:overflow-x-auto">
                       <ReactMarkdown>{generatedReadme}</ReactMarkdown>
                     </div>
                   </div>
