@@ -6,28 +6,28 @@ import { Github, Linkedin, Instagram, Mail } from 'lucide-react';
 const socialLinks = [
   {
     name: 'GitHub',
-    href: process.env.NEXT_PUBLIC_GITHUB_PROFILE_URL || 'https://github.com/Aniruddha-Ponnuri',
+    href: process.env.GITHUB_PROFILE_URL || 'https://github.com/Aniruddha-Ponnuri',
     icon: Github,
   },
   {
     name: 'LinkedIn',
-    href: process.env.NEXT_PUBLIC_LINKEDIN_URL || 'https://www.linkedin.com/in/ponnuri-aniruddha-129991249/',
+    href: process.env.LINKEDIN_URL || 'https://www.linkedin.com/in/ponnuri-aniruddha-129991249/',
     icon: Linkedin,
   },
   {
     name: 'Instagram',
-    href: process.env.NEXT_PUBLIC_INSTAGRAM_URL || 'https://www.instagram.com/aniruddhaponnuri/',
+    href: process.env.INSTAGRAM_URL || 'https://www.instagram.com/aniruddhaponnuri/',
     icon: Instagram,
   },
   {
     name: 'Email',
-    href: `mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'aniruddha.ponnuri@gmail.com'}`,
+    href: `mailto:${process.env.CONTACT_EMAIL || 'aniruddha.ponnuri@gmail.com'}`,
     icon: Mail,
   },
 ];
 
 export default function Footer() {
-  const profileName = process.env.NEXT_PUBLIC_PROFILE_NAME || 'Ponnuri Aniruddha';
+  const profileName = process.env.PROFILE_NAME || 'Ponnuri Aniruddha';
 
   return (
     <footer className="relative overflow-hidden border-t border-border/70 bg-background/80">

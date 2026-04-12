@@ -22,6 +22,12 @@ const log = {
   },
 };
 
+function normalizeMarkdownResponse(content: string): string {
+  const normalized = content.replace(/\r\n/g, '\n').trim();
+  const wrappedMarkdown = normalized.match(/^```(?:markdown|md)?\s*([\s\S]*?)\s*```$/i);
+  return (wrappedMarkdown ? wrappedMarkdown[1] : normalized).trim();
+}
+
 export async function generateReadme(
   repoData: {
     name: string;
@@ -59,6 +65,7 @@ export async function generateReadme(
   4. Ensure the output is valid Markdown only.  
   5. Respond with Markdown format only (no additional text outside Markdown).  
   6. Always include a License section. If license metadata exists, reproduce it exactly; otherwise write: "License: Not specified in repository sources."
+  7. Do not wrap the final README in triple backticks (no fenced outer wrapper).
   Repository Metadata:
   - Name: ${repoData.name}
   - Full Name: ${repoData.fullName || 'Not specified'}
@@ -106,7 +113,7 @@ export async function generateReadme(
       messages: [
         {
           role: 'system',
-          content: 'You are a precise technical documentation writer. Produce clean Markdown only. Never hallucinate. If data is not present in provided sources, say "Not specified in repository sources" or omit that detail.',
+          content: 'You are a precise technical documentation writer. Produce clean Markdown only. Never hallucinate. If data is not present in provided sources, say "Not specified in repository sources" or omit that detail. Never wrap the whole response in code fences.',
         },
         {
           role: 'user',
@@ -126,13 +133,15 @@ export async function generateReadme(
       return 'Failed to generate README - empty response';
     }
 
+    const markdownOnlyContent = normalizeMarkdownResponse(content);
+
     log.info('generateReadme', 'README generated successfully', {
       duration,
-      contentLength: content.length,
+      contentLength: markdownOnlyContent.length,
       usage: chatCompletion.usage,
     });
 
-    return content;
+    return markdownOnlyContent;
   } catch (error) {
     const duration = Date.now() - startTime;
 

@@ -18,8 +18,7 @@ import { useReducedMotion, useContainerQuery } from '@/app/lib/responsive';
 import { GitHubUser, ProjectCard, SearchFilters } from '@/app/types';
 
 const GITHUB_USERNAME =
-  process.env.NEXT_PUBLIC_GITHUB_USERNAME ||
-  process.env.PUBLIC_GITHUB_USERNAME ||
+  process.env.GITHUB_USERNAME ||
   'Aniruddha-Ponnuri';
 
 const fetchGitHubData = async () => {

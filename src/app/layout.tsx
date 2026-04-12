@@ -8,10 +8,9 @@ import Footer from '@/app/components/layout/footer';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  process.env.PUBLIC_APP_URL ||
+  process.env.SITE_URL ||
   'https://aniruddhaponnuri.vercel.app';
-const profileName = process.env.NEXT_PUBLIC_PROFILE_NAME || 'Ponnuri Aniruddha';
+const profileName = process.env.PROFILE_NAME || 'Ponnuri Aniruddha';
 
 // Variable fonts tuned for a stronger editorial feel.
 const manrope = Manrope({
@@ -75,7 +74,7 @@ export const metadata: Metadata = {
     description: 'AI/ML and data engineering portfolio with selected projects, writing, and contact details.',
   },
   // verification: {
-  //   google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+  //   google: process.env.GOOGLE_SITE_VERIFICATION,
   // },
 };
 

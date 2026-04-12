@@ -8,9 +8,9 @@ import { useReducedMotion } from '@/app/lib/responsive';
 import Image from 'next/image';
 import profileImage from '@/app/images/bg_2.png';
 
-const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'aniruddha.ponnuri@gmail.com';
-const locationLabel = process.env.NEXT_PUBLIC_LOCATION || 'Chennai, India';
-const profileName = process.env.NEXT_PUBLIC_PROFILE_NAME || 'Ponnuri Aniruddha';
+const contactEmail = process.env.CONTACT_EMAIL || 'aniruddha.ponnuri@gmail.com';
+const locationLabel = process.env.LOCATION || 'Chennai, India';
+const profileName = process.env.PROFILE_NAME || 'Ponnuri Aniruddha';
 
 const personalInfo = [
   { label: 'Name', value: profileName, icon: User },

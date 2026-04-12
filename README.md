@@ -108,18 +108,18 @@
    Add your values to `.env.local`:
    ```env
    GITHUB_TOKEN=your_github_personal_access_token
-   PUBLIC_GITHUB_USERNAME=your_github_username
+   GITHUB_USERNAME=your_github_username
    GROQ_API_KEY=your_groq_api_key
-   PUBLIC_APP_URL=https://your-domain.com
-   PUBLIC_PROFILE_NAME=Your Full Name
-   PUBLIC_CONTACT_EMAIL=your.email@example.com
-   PUBLIC_PHONE=+91-0000000000
-   PUBLIC_LOCATION=Your City, Country
-   PUBLIC_GITHUB_PROFILE_URL=https://github.com/your-username
-   PUBLIC_LINKEDIN_URL=https://www.linkedin.com/in/your-linkedin-id/
-   PUBLIC_INSTAGRAM_URL=https://www.instagram.com/your-handle/
-   PUBLIC_MAPS_URL=https://www.google.com/maps/@13.0475255,80.2090117,8z
-   PUBLIC_RESUME_URL=https://drive.google.com/file/d/YOUR_FILE_ID/view?usp=drivesdk
+   SITE_URL=https://your-domain.com
+   PROFILE_NAME=Your Full Name
+   CONTACT_EMAIL=your.email@example.com
+   PHONE=+91-0000000000
+   LOCATION=Your City, Country
+   GITHUB_PROFILE_URL=https://github.com/your-username
+   LINKEDIN_URL=https://www.linkedin.com/in/your-linkedin-id/
+   INSTAGRAM_URL=https://www.instagram.com/your-handle/
+   MAPS_URL=https://www.google.com/maps/@13.0475255,80.2090117,8z
+   RESUME_URL=https://drive.google.com/file/d/YOUR_FILE_ID/view?usp=drivesdk
    ```
 
 4. **Run the development server**
@@ -166,18 +166,18 @@ src/
 | Variable | Description | Required |
 |----------|-------------|----------|
 | `GITHUB_TOKEN` | GitHub Personal Access Token for API access | ✅ |
-| `PUBLIC_GITHUB_USERNAME` | GitHub username used by API routes | ✅ |
+| `GITHUB_USERNAME` | GitHub username used by API routes | ✅ |
 | `GROQ_API_KEY` | Groq API key for AI README generation | ✅ |
-| `PUBLIC_APP_URL` | Public site URL used in metadata and sitemap | ✅ |
-| `PUBLIC_PROFILE_NAME` | Name displayed across hero, layout, and footer | ✅ |
-| `PUBLIC_CONTACT_EMAIL` | Contact email used in About, Contact, and Footer | ✅ |
-| `PUBLIC_PHONE` | Contact phone number shown in Contact section | Optional |
-| `PUBLIC_LOCATION` | Location label shown in About and Contact sections | Optional |
-| `PUBLIC_GITHUB_PROFILE_URL` | Footer GitHub profile link | Optional |
-| `PUBLIC_LINKEDIN_URL` | Footer LinkedIn link | Optional |
-| `PUBLIC_INSTAGRAM_URL` | Footer Instagram link | Optional |
-| `PUBLIC_MAPS_URL` | Map link used in contact cards | Optional |
-| `PUBLIC_RESUME_URL` | Resume download URL for hero and resume sections | ✅ |
+| `SITE_URL` | Public site URL used in metadata and sitemap | ✅ |
+| `PROFILE_NAME` | Name displayed across hero, layout, and footer | ✅ |
+| `CONTACT_EMAIL` | Contact email used in About, Contact, and Footer | ✅ |
+| `PHONE` | Contact phone number shown in Contact section | Optional |
+| `LOCATION` | Location label shown in About and Contact sections | Optional |
+| `GITHUB_PROFILE_URL` | Footer GitHub profile link | Optional |
+| `LINKEDIN_URL` | Footer LinkedIn link | Optional |
+| `INSTAGRAM_URL` | Footer Instagram link | Optional |
+| `MAPS_URL` | Map link used in contact cards | Optional |
+| `RESUME_URL` | Resume download URL for hero and resume sections | ✅ |
 
 ### **GitHub Token Setup**
 1. Go to GitHub Settings → Developer Settings → Personal Access Tokens

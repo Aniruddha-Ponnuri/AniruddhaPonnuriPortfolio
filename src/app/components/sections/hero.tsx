@@ -13,15 +13,14 @@ const roles = ['AI/ML Developer', 'Data Engineer', 'Problem Solver'];
 
 // Resume URL - configure via environment variable for easy updates
 const RESUME_URL =
-  process.env.NEXT_PUBLIC_RESUME_URL ||
-  process.env.PUBLIC_RESUME_URL ||
+  process.env.RESUME_URL ||
   'https://drive.google.com/file/d/YOUR_FILE_ID/view?usp=drivesdk';
 
 export default function HeroSection() {
   const [currentRole, setCurrentRole] = useState(0);
   const prefersReducedMotion = useReducedMotion();
   const animationVariants = getAnimationVariants(prefersReducedMotion);
-  const profileName = process.env.NEXT_PUBLIC_PROFILE_NAME || 'Ponnuri Aniruddha';
+  const profileName = process.env.PROFILE_NAME || 'Ponnuri Aniruddha';
 
   useEffect(() => {
     const interval = setInterval(() => {

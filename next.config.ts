@@ -2,28 +2,19 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   env: {
-    NEXT_PUBLIC_GITHUB_USERNAME:
-      process.env.NEXT_PUBLIC_GITHUB_USERNAME || process.env.PUBLIC_GITHUB_USERNAME,
-    NEXT_PUBLIC_SITE_URL:
-      process.env.NEXT_PUBLIC_SITE_URL || process.env.PUBLIC_APP_URL,
-    NEXT_PUBLIC_PROFILE_NAME:
-      process.env.NEXT_PUBLIC_PROFILE_NAME || process.env.PUBLIC_PROFILE_NAME,
-    NEXT_PUBLIC_CONTACT_EMAIL:
-      process.env.NEXT_PUBLIC_CONTACT_EMAIL || process.env.PUBLIC_CONTACT_EMAIL,
-    NEXT_PUBLIC_PHONE:
-      process.env.NEXT_PUBLIC_PHONE || process.env.PUBLIC_PHONE,
-    NEXT_PUBLIC_LOCATION:
-      process.env.NEXT_PUBLIC_LOCATION || process.env.PUBLIC_LOCATION,
-    NEXT_PUBLIC_GITHUB_PROFILE_URL:
-      process.env.NEXT_PUBLIC_GITHUB_PROFILE_URL || process.env.PUBLIC_GITHUB_PROFILE_URL,
-    NEXT_PUBLIC_LINKEDIN_URL:
-      process.env.NEXT_PUBLIC_LINKEDIN_URL || process.env.PUBLIC_LINKEDIN_URL,
-    NEXT_PUBLIC_INSTAGRAM_URL:
-      process.env.NEXT_PUBLIC_INSTAGRAM_URL || process.env.PUBLIC_INSTAGRAM_URL,
-    NEXT_PUBLIC_MAPS_URL:
-      process.env.NEXT_PUBLIC_MAPS_URL || process.env.PUBLIC_MAPS_URL,
-    NEXT_PUBLIC_RESUME_URL:
-      process.env.NEXT_PUBLIC_RESUME_URL || process.env.PUBLIC_RESUME_URL,
+    GITHUB_USERNAME: process.env.GITHUB_USERNAME,
+    SITE_URL: process.env.SITE_URL,
+    PROFILE_NAME: process.env.PROFILE_NAME,
+    CONTACT_EMAIL: process.env.CONTACT_EMAIL,
+    PHONE: process.env.PHONE,
+    LOCATION: process.env.LOCATION,
+    GITHUB_PROFILE_URL: process.env.GITHUB_PROFILE_URL,
+    LINKEDIN_URL: process.env.LINKEDIN_URL,
+    INSTAGRAM_URL: process.env.INSTAGRAM_URL,
+    MAPS_URL: process.env.MAPS_URL,
+    RESUME_URL: process.env.RESUME_URL,
+    GOOGLE_SITE_VERIFICATION: process.env.GOOGLE_SITE_VERIFICATION,
+    ANALYTICS_ID: process.env.ANALYTICS_ID,
   },
   images: {
     remotePatterns: [

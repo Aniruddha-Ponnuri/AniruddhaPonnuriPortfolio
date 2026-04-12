@@ -9,15 +9,14 @@ import { MapPin, Phone, Mail, Globe, Send } from 'lucide-react';
 import { useState } from 'react';
 import { useReducedMotion } from '@/app/lib/responsive';
 
-const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'aniruddha.ponnuri@gmail.com';
-const CONTACT_PHONE = process.env.NEXT_PUBLIC_PHONE || '+91-9205481551';
+const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'aniruddha.ponnuri@gmail.com';
+const CONTACT_PHONE = process.env.PHONE || '+91-9205481551';
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  process.env.PUBLIC_APP_URL ||
+  process.env.SITE_URL ||
   'https://aniruddhaponnuri.vercel.app';
-const LOCATION = process.env.NEXT_PUBLIC_LOCATION || 'Chennai, Tamil Nadu, India';
+const LOCATION = process.env.LOCATION || 'Chennai, Tamil Nadu, India';
 const MAPS_URL =
-  process.env.NEXT_PUBLIC_MAPS_URL || 'https://www.google.co.in/maps/@13.0475255,80.2090117,8z';
+  process.env.MAPS_URL || 'https://www.google.co.in/maps/@13.0475255,80.2090117,8z';
 
 const contactInfo = [
   {

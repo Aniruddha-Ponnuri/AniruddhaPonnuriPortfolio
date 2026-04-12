@@ -10,10 +10,23 @@ import { formatDate, formatNumber } from '@/app/lib/utils';
 import { useReducedMotion, useContainerQuery } from '@/app/lib/responsive';
 import { useState, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
+import rehypeSanitize from 'rehype-sanitize';
 
 interface ProjectCardProps {
   project: ProjectCard;
   onGenerateReadme: (project: ProjectCard) => Promise<string>;
+}
+
+function unwrapMarkdownFence(markdown: string): string {
+  const trimmed = markdown.trim();
+  const fencedMarkdown = trimmed.match(/^```(?:markdown|md)?\s*([\s\S]*?)\s*```$/i);
+  return fencedMarkdown ? fencedMarkdown[1].trim() : trimmed;
+}
+
+function isAbsoluteUrl(value: string): boolean {
+  return /^(?:[a-z]+:)?\/\//i.test(value) || value.startsWith('mailto:') || value.startsWith('tel:') || value.startsWith('#') || value.startsWith('data:');
 }
 
 export function ProjectCardComponent({ project, onGenerateReadme }: ProjectCardProps) {
@@ -46,6 +59,33 @@ export function ProjectCardComponent({ project, onGenerateReadme }: ProjectCardP
 
   const layout = getCardLayout();
   const resolvedReadme = project.readme || generatedReadme;
+  const normalizedReadme = resolvedReadme ? unwrapMarkdownFence(resolvedReadme) : '';
+
+  const resolveRepoLink = (href = ''): string => {
+    if (!href || isAbsoluteUrl(href)) return href;
+
+    const baseUrl = `https://github.com/${project.full_name}/blob/HEAD/`;
+    const normalizedHref = href.startsWith('/') ? href.slice(1) : href;
+
+    try {
+      return new URL(normalizedHref, baseUrl).toString();
+    } catch {
+      return href;
+    }
+  };
+
+  const resolveRepoImage = (src = ''): string => {
+    if (!src || isAbsoluteUrl(src)) return src;
+
+    const baseUrl = `https://raw.githubusercontent.com/${project.full_name}/HEAD/`;
+    const normalizedSrc = src.startsWith('/') ? src.slice(1) : src;
+
+    try {
+      return new URL(normalizedSrc, baseUrl).toString();
+    } catch {
+      return src;
+    }
+  };
 
   return (
     <Card 
@@ -141,19 +181,46 @@ export function ProjectCardComponent({ project, onGenerateReadme }: ProjectCardP
               </DialogHeader>
               
               <div className="flex-1 overflow-y-auto space-y-4 mt-4 pr-2">
-                {resolvedReadme ? (
-                  <div className="prose prose-xs sm:prose-sm max-w-none dark:prose-invert prose-headings:scroll-mt-20 prose-p:leading-relaxed prose-pre:max-w-full prose-pre:overflow-x-auto prose-img:rounded-lg prose-img:shadow-md">
+                {normalizedReadme ? (
+                  <div className="prose prose-xs sm:prose-sm max-w-none dark:prose-invert prose-headings:scroll-mt-20 prose-p:leading-relaxed prose-pre:max-w-full prose-pre:overflow-x-auto prose-img:rounded-lg prose-img:shadow-md prose-table:block prose-table:overflow-x-auto prose-table:whitespace-nowrap sm:prose-table:whitespace-normal">
                     <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      rehypePlugins={[rehypeRaw, rehypeSanitize]}
                       components={{
-                        // Sanitize links
-                        a: ({ ...props }) => (
-                          <a {...props} target="_blank" rel="noopener noreferrer" />
+                        a: ({ href = '', ...props }) => {
+                          const resolvedHref = resolveRepoLink(href);
+                          const isExternal = /^https?:\/\//i.test(resolvedHref) || resolvedHref.startsWith('mailto:') || resolvedHref.startsWith('tel:');
+
+                          return (
+                            <a
+                              {...props}
+                              href={resolvedHref}
+                              target={isExternal ? '_blank' : undefined}
+                              rel={isExternal ? 'noopener noreferrer' : undefined}
+                            />
+                          );
+                        },
+                        img: ({ src = '', alt = '', ...props }) => (
+                          // Resolve relative README image paths to raw GitHub URLs.
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            {...props}
+                            src={typeof src === 'string' ? resolveRepoImage(src) : undefined}
+                            alt={typeof alt === 'string' ? alt : ''}
+                            loading="lazy"
+                            className="rounded-md border border-border/60"
+                          />
                         ),
-                        // Prevent script tags
+                        table: ({ ...props }) => (
+                          <div className="overflow-x-auto">
+                            <table {...props} className="w-full border-collapse" />
+                          </div>
+                        ),
+                        // Prevent script tags regardless of markdown source.
                         script: () => null,
                       }}
                     >
-                      {resolvedReadme}
+                      {normalizedReadme}
                     </ReactMarkdown>
                   </div>
                 ) : (

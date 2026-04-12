@@ -50,8 +50,6 @@ export async function GET(request: NextRequest) {
     const rawUsername =
       searchParams.get('username') ||
       process.env.GITHUB_USERNAME ||
-      process.env.NEXT_PUBLIC_GITHUB_USERNAME ||
-      process.env.PUBLIC_GITHUB_USERNAME ||
       'Aniruddha-Ponnuri';
     const username = rawUsername?.trim();
 

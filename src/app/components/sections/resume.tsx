@@ -66,8 +66,7 @@ const education = [
 ];
 
 const RESUME_URL =
-  process.env.NEXT_PUBLIC_RESUME_URL ||
-  process.env.PUBLIC_RESUME_URL ||
+  process.env.RESUME_URL ||
   'https://drive.google.com/file/d/YOUR_FILE_ID/view?usp=drivesdk';
 
 export default function ResumeSection() {
