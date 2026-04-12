@@ -13,8 +13,7 @@ const roles = ['AI/ML Developer', 'Data Engineer', 'Problem Solver'];
 
 // Resume URL - configure via environment variable for easy updates
 const RESUME_URL =
-  process.env.RESUME_URL ||
-  'https://drive.google.com/file/d/YOUR_FILE_ID/view?usp=drivesdk';
+  process.env.RESUME_URL ;
 
 export default function HeroSection() {
   const [currentRole, setCurrentRole] = useState(0);
@@ -49,14 +48,7 @@ export default function HeroSection() {
             }}
             className="space-y-6 text-center lg:text-left"
           >
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, delay: 0.25, ease: [0.23, 1, 0.32, 1] }}
-              className="inline-flex w-fit rounded-full border border-primary/35 bg-primary/8 px-3 py-1 text-sm font-medium text-primary"
-            >
-              Hello, I build useful AI products
-            </motion.div>
+
 
             <motion.h1
               initial={{ opacity: 0, y: 14 }}

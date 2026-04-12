@@ -22,23 +22,25 @@ const log = {
   },
 };
 
-const getGitHubData = unstable_cache(
-  async (username: string) => {
-    const [user, repos] = await Promise.all([
-      getGitHubUser(username),
-      getGitHubRepos(username),
-    ]);
+async function getGitHubData(username: string) {
+  return unstable_cache(
+    async () => {
+      const [user, repos] = await Promise.all([
+        getGitHubUser(username),
+        getGitHubRepos(username),
+      ]);
 
-    const enrichedRepos = await enrichRepoData(repos, username);
+      const enrichedRepos = await enrichRepoData(repos, username);
 
-    return {
-      user,
-      repositories: enrichedRepos,
-    };
-  },
-  ['github-data'],
-  { revalidate: 3600 }
-);
+      return {
+        user,
+        repositories: enrichedRepos,
+      };
+    },
+    ['github-data', username],
+    { revalidate: 3600 }
+  )();
+}
 
 export async function GET(request: NextRequest) {
   const startTime = Date.now();

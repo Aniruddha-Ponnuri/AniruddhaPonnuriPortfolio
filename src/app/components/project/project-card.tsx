@@ -8,16 +8,19 @@ import { ExternalLink, Star, GitFork, Eye, Calendar, FileText } from 'lucide-rea
 import { ProjectCard } from '@/app/types';
 import { formatDate, formatNumber } from '@/app/lib/utils';
 import { useReducedMotion, useContainerQuery } from '@/app/lib/responsive';
-import { useState, useRef } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import rehypeRaw from 'rehype-raw';
-import rehypeSanitize from 'rehype-sanitize';
+import dynamic from 'next/dynamic';
+import { memo, useState, useRef, useEffect, useCallback } from 'react';
 
 interface ProjectCardProps {
   project: ProjectCard;
   onGenerateReadme: (project: ProjectCard) => Promise<string>;
+  onLoadReadme: (project: ProjectCard) => Promise<string | null>;
 }
+
+const ReadmeRenderer = dynamic(
+  () => import('./readme-renderer').then((mod) => mod.ReadmeRenderer),
+  { ssr: false }
+);
 
 function unwrapMarkdownFence(markdown: string): string {
   const trimmed = markdown.trim();
@@ -25,17 +28,17 @@ function unwrapMarkdownFence(markdown: string): string {
   return fencedMarkdown ? fencedMarkdown[1].trim() : trimmed;
 }
 
-function isAbsoluteUrl(value: string): boolean {
-  return /^(?:[a-z]+:)?\/\//i.test(value) || value.startsWith('mailto:') || value.startsWith('tel:') || value.startsWith('#') || value.startsWith('data:');
-}
-
-export function ProjectCardComponent({ project, onGenerateReadme }: ProjectCardProps) {
+function ProjectCardComponentInner({ project, onGenerateReadme, onLoadReadme }: ProjectCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const containerSize = useContainerQuery(cardRef);
   const prefersReducedMotion = useReducedMotion();
   
+  const [repositoryReadme, setRepositoryReadme] = useState<string>(project.readme || '');
   const [generatedReadme, setGeneratedReadme] = useState<string>('');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isReadmeLoading, setIsReadmeLoading] = useState(false);
+  const [didAttemptReadmeLoad, setDidAttemptReadmeLoad] = useState(Boolean(project.readme));
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleGenerateReadme = async () => {
     setIsGenerating(true);
@@ -44,9 +47,36 @@ export function ProjectCardComponent({ project, onGenerateReadme }: ProjectCardP
       setGeneratedReadme(readme);
     } catch (error) {
       console.error('Failed to generate README:', error);
+    } finally {
+      setIsGenerating(false);
     }
-    setIsGenerating(false);
   };
+
+  const handleLoadReadme = useCallback(async () => {
+    if (didAttemptReadmeLoad || isReadmeLoading) {
+      return;
+    }
+
+    setDidAttemptReadmeLoad(true);
+    setIsReadmeLoading(true);
+
+    try {
+      const readme = await onLoadReadme(project);
+      if (readme) {
+        setRepositoryReadme(readme);
+      }
+    } catch (error) {
+      console.error('Failed to load repository README:', error);
+    } finally {
+      setIsReadmeLoading(false);
+    }
+  }, [didAttemptReadmeLoad, isReadmeLoading, onLoadReadme, project]);
+
+  useEffect(() => {
+    if (isDialogOpen && !repositoryReadme && !generatedReadme) {
+      void handleLoadReadme();
+    }
+  }, [generatedReadme, handleLoadReadme, isDialogOpen, repositoryReadme]);
 
   // Adaptive layout based on container size
   const getCardLayout = () => {
@@ -58,34 +88,8 @@ export function ProjectCardComponent({ project, onGenerateReadme }: ProjectCardP
   };
 
   const layout = getCardLayout();
-  const resolvedReadme = project.readme || generatedReadme;
+  const resolvedReadme = repositoryReadme || generatedReadme;
   const normalizedReadme = resolvedReadme ? unwrapMarkdownFence(resolvedReadme) : '';
-
-  const resolveRepoLink = (href = ''): string => {
-    if (!href || isAbsoluteUrl(href)) return href;
-
-    const baseUrl = `https://github.com/${project.full_name}/blob/HEAD/`;
-    const normalizedHref = href.startsWith('/') ? href.slice(1) : href;
-
-    try {
-      return new URL(normalizedHref, baseUrl).toString();
-    } catch {
-      return href;
-    }
-  };
-
-  const resolveRepoImage = (src = ''): string => {
-    if (!src || isAbsoluteUrl(src)) return src;
-
-    const baseUrl = `https://raw.githubusercontent.com/${project.full_name}/HEAD/`;
-    const normalizedSrc = src.startsWith('/') ? src.slice(1) : src;
-
-    try {
-      return new URL(normalizedSrc, baseUrl).toString();
-    } catch {
-      return src;
-    }
-  };
 
   return (
     <Card 
@@ -165,7 +169,7 @@ export function ProjectCardComponent({ project, onGenerateReadme }: ProjectCardP
             </Button>
           )}
 
-          <Dialog>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Button variant="default" size="sm" className="flex-1 min-w-[120px]">
                 <FileText className="h-4 w-4 mr-2" />
@@ -181,48 +185,15 @@ export function ProjectCardComponent({ project, onGenerateReadme }: ProjectCardP
               </DialogHeader>
               
               <div className="flex-1 overflow-y-auto space-y-4 mt-4 pr-2">
-                {normalizedReadme ? (
-                  <div className="prose prose-xs sm:prose-sm max-w-none dark:prose-invert prose-headings:scroll-mt-20 prose-p:leading-relaxed prose-pre:max-w-full prose-pre:overflow-x-auto prose-img:rounded-lg prose-img:shadow-md prose-table:block prose-table:overflow-x-auto prose-table:whitespace-nowrap sm:prose-table:whitespace-normal">
-                    <ReactMarkdown
-                      remarkPlugins={[remarkGfm]}
-                      rehypePlugins={[rehypeRaw, rehypeSanitize]}
-                      components={{
-                        a: ({ href = '', ...props }) => {
-                          const resolvedHref = resolveRepoLink(href);
-                          const isExternal = /^https?:\/\//i.test(resolvedHref) || resolvedHref.startsWith('mailto:') || resolvedHref.startsWith('tel:');
-
-                          return (
-                            <a
-                              {...props}
-                              href={resolvedHref}
-                              target={isExternal ? '_blank' : undefined}
-                              rel={isExternal ? 'noopener noreferrer' : undefined}
-                            />
-                          );
-                        },
-                        img: ({ src = '', alt = '', ...props }) => (
-                          // Resolve relative README image paths to raw GitHub URLs.
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            {...props}
-                            src={typeof src === 'string' ? resolveRepoImage(src) : undefined}
-                            alt={typeof alt === 'string' ? alt : ''}
-                            loading="lazy"
-                            className="rounded-md border border-border/60"
-                          />
-                        ),
-                        table: ({ ...props }) => (
-                          <div className="overflow-x-auto">
-                            <table {...props} className="w-full border-collapse" />
-                          </div>
-                        ),
-                        // Prevent script tags regardless of markdown source.
-                        script: () => null,
-                      }}
-                    >
-                      {normalizedReadme}
-                    </ReactMarkdown>
+                {isReadmeLoading ? (
+                  <div className="space-y-3 py-2">
+                    <div className="h-4 w-2/3 rounded bg-muted animate-pulse" />
+                    <div className="h-4 w-5/6 rounded bg-muted animate-pulse" />
+                    <div className="h-4 w-3/5 rounded bg-muted animate-pulse" />
+                    <div className="h-32 w-full rounded bg-muted animate-pulse" />
                   </div>
+                ) : normalizedReadme ? (
+                  <ReadmeRenderer markdown={normalizedReadme} repoFullName={project.full_name} />
                 ) : (
                   <div className="text-center space-y-4 py-8">
                     <p className="text-muted-foreground text-sm sm:text-base">
@@ -246,3 +217,7 @@ export function ProjectCardComponent({ project, onGenerateReadme }: ProjectCardP
     </Card>
   );
 }
+
+export const ProjectCardComponent = memo(ProjectCardComponentInner);
+
+ProjectCardComponent.displayName = 'ProjectCardComponent';

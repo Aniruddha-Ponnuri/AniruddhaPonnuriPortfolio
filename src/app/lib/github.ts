@@ -127,58 +127,27 @@ export async function enrichRepoData(repos: GitHubRepo[], username: string): Pro
   const startTime = Date.now();
   log.info('enrichRepoData', 'Starting repo enrichment', { username, repoCount: repos.length });
 
-  const enrichedRepos = await Promise.allSettled(
-    repos.map(async (repo) => {
-      try {
-        const [languages, readme] = await Promise.allSettled([
-          getRepoLanguages(username, repo.name),
-          getRepoReadme(username, repo.name),
-        ]);
+  // Use primary language from listForUser response to avoid N+1 language/readme API requests.
+  // README content is fetched on demand when users open the README dialog.
+  const enrichedRepos = repos.map((repo) => {
+    const repoLanguages = repo.language ? { [repo.language]: 100 } : {};
 
-        const repoLanguages = languages.status === 'fulfilled' ? languages.value : {};
-        const repoReadme = readme.status === 'fulfilled' ? readme.value : undefined;
+    return {
+      ...repo,
+      languages: repoLanguages,
+      tags: generateTags(repo, repoLanguages),
+    };
+  });
 
-        const tags = generateTags(repo, repoLanguages);
-
-        const projectCard: ProjectCard = {
-          ...repo,
-          languages: repoLanguages,
-          tags,
-        };
-
-        if (repoReadme) {
-          projectCard.readme = repoReadme;
-        }
-
-        return projectCard;
-      } catch (error) {
-        log.warn('enrichRepoData', `Failed to enrich repo: ${repo.name}`, { error });
-        // Return basic repo data if enrichment fails
-        const basicProjectCard: ProjectCard = {
-          ...repo,
-          languages: {},
-          tags: generateTags(repo, {}),
-        };
-        return basicProjectCard;
-      }
-    })
-  );
-
-  // Filter out failed promises and return successful ones
-  const successfulRepos = enrichedRepos
-    .filter((result): result is PromiseFulfilledResult<ProjectCard> => result.status === 'fulfilled')
-    .map(result => result.value);
-
-  const failedCount = enrichedRepos.filter(r => r.status === 'rejected').length;
   const duration = Date.now() - startTime;
 
   log.info('enrichRepoData', 'Enrichment complete', {
     username,
     totalRepos: repos.length,
-    successfulRepos: successfulRepos.length,
-    failedRepos: failedCount,
+    successfulRepos: enrichedRepos.length,
+    failedRepos: 0,
     duration,
   });
 
-  return successfulRepos;
+  return enrichedRepos;
 }

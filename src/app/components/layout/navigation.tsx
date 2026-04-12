@@ -17,7 +17,7 @@ export function Navigation() {
   const [activeSection, setActiveSection] = useState('home');
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   const navItems = [
@@ -36,8 +36,8 @@ export function Navigation() {
     const updateScrollProgress = () => {
       const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
       const scrolled = window.scrollY;
-      const progress = (scrolled / scrollHeight) * 100;
-      setScrollProgress(progress);
+      const progress = scrollHeight > 0 ? (scrolled / scrollHeight) * 100 : 0;
+      setScrollProgress(Math.min(100, Math.max(0, progress)));
     };
 
     // Intersection Observer for active section
@@ -79,15 +79,19 @@ export function Navigation() {
   };
 
   const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
+    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
   };
+
+  const isDarkTheme = resolvedTheme === 'dark';
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-border/70 bg-background/70 backdrop-blur-xl supports-[backdrop-filter]:bg-background/55">
       {/* Progress bar */}
-      <div
-        className="absolute bottom-0 left-0 h-px bg-gradient-to-r from-primary via-secondary to-accent transition-[width] duration-150 ease-[var(--ease-out)]"
-        style={{ width: `${scrollProgress}%` }}
+      <motion.div
+        className="absolute bottom-0 left-0 h-px bg-gradient-to-r from-primary via-primary/80 to-secondary transition-[width] duration-150 ease-[var(--ease-out)]"
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: scrollProgress / 100 }}
+        transition={{ duration: 0.15, ease: [0.23, 1, 0.32, 1] }}
       />
       
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -164,7 +168,7 @@ export function Navigation() {
                 className="h-9 w-9 rounded-full border border-border/70 p-0"
                 aria-label="Toggle theme"
               >
-                {theme === 'dark' ? (
+                {isDarkTheme ? (
                   <Sun className="h-4 w-4" />
                 ) : (
                   <Moon className="h-4 w-4" />

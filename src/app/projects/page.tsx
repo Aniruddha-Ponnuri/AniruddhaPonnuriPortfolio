@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { Navigation } from '@/app/components/layout/navigation';
@@ -39,8 +39,16 @@ export default function ProjectsPage() {
   
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
+  const handleTagSelect = useCallback((tag: string) => {
+    setSelectedTags((prev) => (prev.includes(tag) ? prev : [...prev, tag]));
+  }, []);
+
+  const handleTagRemove = useCallback((tag: string) => {
+    setSelectedTags((prev) => prev.filter((item) => item !== tag));
+  }, []);
+
   // Handle README generation
-  const handleGenerateReadme = async (project: ProjectCard): Promise<string> => {
+  const handleGenerateReadme = useCallback(async (project: ProjectCard): Promise<string> => {
     try {
       const response = await fetch('/api/readme', {
         method: 'POST',
@@ -72,7 +80,29 @@ export default function ProjectsPage() {
       console.error('Error generating README:', error);
       return 'Failed to generate README. Please try again.';
     }
-  };
+  }, []);
+
+  const handleLoadReadme = useCallback(async (project: ProjectCard): Promise<string | null> => {
+    try {
+      const [owner, repo] = project.full_name.split('/');
+      if (!owner || !repo) {
+        return null;
+      }
+
+      const params = new URLSearchParams({ owner, repo });
+      const response = await fetch(`/api/github/readme?${params.toString()}`);
+
+      if (!response.ok) {
+        return null;
+      }
+
+      const { readme } = await response.json();
+      return typeof readme === 'string' && readme.trim() ? readme : null;
+    } catch (error) {
+      console.error('Error loading repository README:', error);
+      return null;
+    }
+  }, []);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['github-data', GITHUB_USERNAME],
@@ -269,18 +299,13 @@ export default function ProjectsPage() {
                   y: 0,
                   transition: { delay: 0.6, duration: prefersReducedMotion ? 0 : 0.6 }
                 }}
-              >                <SearchFiltersComponent
+              >
+                <SearchFiltersComponent
                   filters={filters}
                   onFiltersChange={setFilters}
                   selectedTags={selectedTags}
-                  onTagSelect={(tag: string) => {
-                    if (!selectedTags.includes(tag)) {
-                      setSelectedTags([...selectedTags, tag]);
-                    }
-                  }}
-                  onTagRemove={(tag: string) => {
-                    setSelectedTags(selectedTags.filter(t => t !== tag));
-                  }}
+                  onTagSelect={handleTagSelect}
+                  onTagRemove={handleTagRemove}
                   availableTags={allTags}
                   availableLanguages={allLanguages}
                 />
@@ -302,6 +327,7 @@ export default function ProjectsPage() {
                     key={project.id} 
                     project={project}
                     onGenerateReadme={handleGenerateReadme}
+                    onLoadReadme={handleLoadReadme}
                   />
                 ))
               )}

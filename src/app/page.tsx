@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { Navigation } from '@/app/components/layout/navigation';
@@ -119,17 +119,15 @@ export default function HomePage() {
     });
   }, [repositories, filters, selectedTags]);
 
-  const handleTagSelect = (tag: string) => {
-    if (!selectedTags.includes(tag)) {
-      setSelectedTags([...selectedTags, tag]);
-    }
-  };
+  const handleTagSelect = useCallback((tag: string) => {
+    setSelectedTags((prev) => (prev.includes(tag) ? prev : [...prev, tag]));
+  }, []);
 
-  const handleTagRemove = (tag: string) => {
-    setSelectedTags(selectedTags.filter(t => t !== tag));
-  };
+  const handleTagRemove = useCallback((tag: string) => {
+    setSelectedTags((prev) => prev.filter((item) => item !== tag));
+  }, []);
 
-  const handleGenerateReadme = async (project: ProjectCard): Promise<string> => {
+  const handleGenerateReadme = useCallback(async (project: ProjectCard): Promise<string> => {
     try {
       const response = await fetch('/api/readme', {
         method: 'POST',
@@ -161,7 +159,29 @@ export default function HomePage() {
       console.error('Error generating README:', error);
       throw error;
     }
-  };
+  }, []);
+
+  const handleLoadReadme = useCallback(async (project: ProjectCard): Promise<string | null> => {
+    try {
+      const [owner, repo] = project.full_name.split('/');
+      if (!owner || !repo) {
+        return null;
+      }
+
+      const params = new URLSearchParams({ owner, repo });
+      const response = await fetch(`/api/github/readme?${params.toString()}`);
+
+      if (!response.ok) {
+        return null;
+      }
+
+      const { readme } = await response.json();
+      return typeof readme === 'string' && readme.trim() ? readme : null;
+    } catch (error) {
+      console.error('Error loading repository README:', error);
+      return null;
+    }
+  }, []);
 
   if (error) {
     return (
@@ -310,6 +330,7 @@ export default function HomePage() {
                       <ProjectCardComponent
                         project={project}
                         onGenerateReadme={handleGenerateReadme}
+                        onLoadReadme={handleLoadReadme}
                       />
                     </motion.div>
                   ))}
