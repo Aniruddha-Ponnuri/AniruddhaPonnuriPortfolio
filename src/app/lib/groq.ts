@@ -22,6 +22,112 @@ const log = {
   },
 };
 
+const MODEL_NAME = process.env.GROQ_README_MODEL || 'llama-3.1-8b-instant';
+const MAX_README_OUTPUT_TOKENS = 1024;
+
+function isTokenLimitError(message: string): boolean {
+  const normalized = message.toLowerCase();
+  return (
+    normalized.includes('request too large') ||
+    normalized.includes('tokens per minute') ||
+    normalized.includes('rate_limit_exceeded') ||
+    normalized.includes('413')
+  );
+}
+
+function truncateChars(value: string, maxChars: number, sectionName: string): string {
+  const normalized = value.trim();
+  if (!normalized || normalized.length <= maxChars) {
+    return normalized;
+  }
+
+  return `${normalized.slice(0, maxChars)}\n\n[${sectionName} truncated for token safety]`;
+}
+
+function buildReadmePrompt(
+  repoData: {
+    name: string;
+    description: string | null;
+    language: string | null;
+    languages: Record<string, number>;
+    topics: string[];
+    homepage: string | null;
+    fullName?: string;
+    repoUrl?: string;
+    license?: string | null;
+  },
+  gitingestData: {
+    summary: string;
+    tree: string;
+    content: string;
+  }
+): string {
+  return `Create a README.md using only verified information.
+
+Rules (must follow):
+1. Rely exclusively on details from "Gitingest Tree", "Gitingest Content", "Gitingest Summary", and "Repository Metadata".
+2. Do not assume or fabricate features, dependencies, setup steps, filenames, links, badges, or system design.
+3. If any detail is unavailable, omit it or state "Not specified in repository sources".
+4. Ensure the output is valid Markdown only.
+5. Respond with Markdown format only (no additional text outside Markdown).
+6. Always include a License section. If license metadata exists, reproduce it exactly; otherwise write: "License: Not specified in repository sources."
+7. Do not wrap the final README in triple backticks (no fenced outer wrapper).
+
+Repository Metadata:
+- Name: ${repoData.name}
+- Full Name: ${repoData.fullName || 'Not specified'}
+- Repo URL: ${repoData.repoUrl || 'Not specified'}
+- Description: ${repoData.description || 'Not specified'}
+- Primary Language: ${repoData.language || 'Not specified'}
+- All Languages: ${Object.keys(repoData.languages).join(', ') || 'Not specified'}
+- Topics: ${repoData.topics.join(', ') || 'Not specified'}
+- Homepage: ${repoData.homepage || 'Not specified'}
+- License: ${repoData.license || 'Not specified'}
+
+Gitingest Summary:
+---
+${gitingestData.summary || 'Not specified in repository sources'}
+---
+
+Gitingest Tree:
+---
+${gitingestData.tree || 'Not specified in repository sources'}
+---
+
+Gitingest Content:
+---
+${gitingestData.content || 'Not specified in repository sources'}
+---
+
+Suggested section order:
+- Title
+- Overview
+- Features
+- Tech Stack
+- Installation
+- Usage
+- Contributing
+- License`;
+}
+
+async function requestReadme(prompt: string, maxTokens: number) {
+  return groq.chat.completions.create({
+    messages: [
+      {
+        role: 'system',
+        content: 'You are a precise technical documentation writer. Produce clean Markdown only. Never hallucinate. If data is not present in provided sources, say "Not specified in repository sources" or omit that detail. Never wrap the whole response in code fences.',
+      },
+      {
+        role: 'user',
+        content: prompt,
+      },
+    ],
+    model: MODEL_NAME,
+    temperature: 0.2,
+    max_tokens: maxTokens,
+  });
+}
+
 function normalizeMarkdownResponse(content: string): string {
   const normalized = content.replace(/\r\n/g, '\n').trim();
   const wrappedMarkdown = normalized.match(/^```(?:markdown|md)?\s*([\s\S]*?)\s*```$/i);
@@ -56,74 +162,48 @@ export async function generateReadme(
   }
 
   try {
-    const prompt = `Create a README.md using only verified information.
+    const baseContext = {
+      summary: truncateChars(gitingestData.summary, 800, 'Summary'),
+      tree: truncateChars(gitingestData.tree, 3500, 'Tree'),
+      content: truncateChars(gitingestData.content, 6000, 'Content'),
+    };
 
-  Rules (must follow):
-  1. Rely exclusively on details from "Gitingest Tree", "Gitingest Content", "Gitingest Summary", and "Repository Metadata".  
-  2. Do not assume or fabricate features, dependencies, setup steps, filenames, links, badges, or system design.  
-  3. If any detail is unavailable, omit it or state "Not specified in repository sources".  
-  4. Ensure the output is valid Markdown only.  
-  5. Respond with Markdown format only (no additional text outside Markdown).  
-  6. Always include a License section. If license metadata exists, reproduce it exactly; otherwise write: "License: Not specified in repository sources."
-  7. Do not wrap the final README in triple backticks (no fenced outer wrapper).
-  Repository Metadata:
-  - Name: ${repoData.name}
-  - Full Name: ${repoData.fullName || 'Not specified'}
-  - Repo URL: ${repoData.repoUrl || 'Not specified'}
-  - Description: ${repoData.description || 'Not specified'}
-  - Primary Language: ${repoData.language || 'Not specified'}
-  - All Languages: ${Object.keys(repoData.languages).join(', ') || 'Not specified'}
-  - Topics: ${repoData.topics.join(', ') || 'Not specified'}
-  - Homepage: ${repoData.homepage || 'Not specified'}
-  - License: ${repoData.license || 'Not specified'}
-
-  Gitingest Summary:
-  ---
-  ${gitingestData.summary || 'Not specified in repository sources'}
-  ---
-
-  Gitingest Tree:
-  ---
-  ${gitingestData.tree || 'Not specified in repository sources'}
-  ---
-
-  Gitingest Content:
-  ---
-  ${gitingestData.content || 'Not specified in repository sources'}
-  ---
-
-  Suggested section order:
-  - Title
-  - Overview
-  - Features
-  - Tech Stack
-  - Installation
-  - Usage
-  - Contributing
-  - License`;
+    const prompt = buildReadmePrompt(repoData, baseContext);
 
     log.info('generateReadme', 'Sending request to Groq API', {
-      model: 'llama-3.1-8b-instant',
+      model: MODEL_NAME,
       promptLength: prompt.length,
-      gitingestTreeLength: gitingestData.tree.length,
-      gitingestContentLength: gitingestData.content.length,
+      gitingestSummaryLength: baseContext.summary.length,
+      gitingestTreeLength: baseContext.tree.length,
+      gitingestContentLength: baseContext.content.length,
+      maxTokens: MAX_README_OUTPUT_TOKENS,
     });
 
-    const chatCompletion = await groq.chat.completions.create({
-      messages: [
-        {
-          role: 'system',
-          content: 'You are a precise technical documentation writer. Produce clean Markdown only. Never hallucinate. If data is not present in provided sources, say "Not specified in repository sources" or omit that detail. Never wrap the whole response in code fences.',
-        },
-        {
-          role: 'user',
-          content: prompt,
-        },
-      ],
-      model: 'llama-3.1-8b-instant',
-      temperature: 0.2,
-      max_tokens: 2048,
-    });
+    let chatCompletion;
+    try {
+      chatCompletion = await requestReadme(prompt, MAX_README_OUTPUT_TOKENS);
+    } catch (firstError) {
+      const message = firstError instanceof Error ? firstError.message : String(firstError);
+
+      if (!isTokenLimitError(message)) {
+        throw firstError;
+      }
+
+      const fallbackContext = {
+        summary: truncateChars(baseContext.summary, 350, 'Summary'),
+        tree: truncateChars(baseContext.tree, 1400, 'Tree'),
+        content: truncateChars(baseContext.content, 2200, 'Content'),
+      };
+      const fallbackPrompt = buildReadmePrompt(repoData, fallbackContext);
+
+      log.warn('generateReadme', 'Prompt exceeded token budget, retrying with compact context', {
+        repoName: repoData.name,
+        originalPromptLength: prompt.length,
+        compactPromptLength: fallbackPrompt.length,
+      });
+
+      chatCompletion = await requestReadme(fallbackPrompt, 768);
+    }
 
     const content = chatCompletion.choices[0]?.message?.content;
     const duration = Date.now() - startTime;

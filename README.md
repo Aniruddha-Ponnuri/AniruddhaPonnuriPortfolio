@@ -6,9 +6,9 @@
 
 [![Next.js](https://img.shields.io/badge/Next.js-16.2.3-black?style=flat&logo=next.js&logoColor=white)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.2.5-149ECA?style=flat&logo=react&logoColor=white)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.1.9-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![Framer Motion](https://img.shields.io/badge/Framer%20Motion-12.17.0-0055FF?style=flat&logo=framer&logoColor=white)](https://www.framer.com/motion/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.2.2-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Framer Motion](https://img.shields.io/badge/Framer%20Motion-12.38.0-0055FF?style=flat&logo=framer&logoColor=white)](https://www.framer.com/motion/)
 
 **A modern, responsive portfolio website showcasing AI/ML development expertise with advanced animations and GitHub integration.**
 
@@ -29,7 +29,7 @@
 
 ### 🔧 **Advanced Technical Features**
 - 📦 **Container Queries** - Granular responsive design at component level
-- 🎨 **Variable Fonts** - Inter, Inter Tight, and JetBrains Mono with optical sizing
+- 🎨 **Variable Fonts** - Manrope, Space Grotesk, and JetBrains Mono with optical sizing
 - 📐 **CSS Grid Level 3** - Modern layout techniques with subgrid support
 - 🎪 **Fluid Typography** - Responsive text scaling using clamp() functions
 - ⚡ **Performance Optimized** - Core Web Vitals optimization
@@ -56,12 +56,12 @@
 ### **Frontend Framework**
 - **Next.js 16.2.3** - App Router, Server Components, TypeScript
 - **React 19.2.5** - Latest stable React runtime
-- **TypeScript 5** - Type-safe development environment
+- **TypeScript 5.9.3** - Type-safe development environment
 
 ### **Styling & UI**
-- **Tailwind CSS 4.1.9** - Utility-first CSS framework
+- **Tailwind CSS 4.2.2** - Utility-first CSS framework
 - **Radix UI** - Accessible component primitives
-- **Framer Motion 12.17.0** - Production-ready motion library
+- **Framer Motion 12.38.0** - Production-ready motion library
 - **Lucide React** - Beautiful SVG icon library
 
 ### **Data & APIs**
@@ -110,6 +110,8 @@
    GITHUB_TOKEN=your_github_personal_access_token
    GITHUB_USERNAME=your_github_username
    GROQ_API_KEY=your_groq_api_key
+   # Optional model override for README generation
+   GROQ_README_MODEL=llama-3.1-8b-instant
    SITE_URL=https://your-domain.com
    PROFILE_NAME=Your Full Name
    CONTACT_EMAIL=your.email@example.com
@@ -120,6 +122,11 @@
    INSTAGRAM_URL=https://www.instagram.com/your-handle/
    MAPS_URL=https://www.google.com/maps/@13.0475255,80.2090117,8z
    RESUME_URL=https://drive.google.com/file/d/YOUR_FILE_ID/view?usp=drivesdk
+   # Optional service override
+   GITINGEST_API_URL=https://gitingest.com
+   # Optional search/verification
+   GOOGLE_SITE_VERIFICATION=your_google_site_verification
+   ANALYTICS_ID=your_analytics_id
    ```
 
 4. **Run the development server**
@@ -168,6 +175,7 @@ src/
 | `GITHUB_TOKEN` | GitHub Personal Access Token for API access | ✅ |
 | `GITHUB_USERNAME` | GitHub username used by API routes | ✅ |
 | `GROQ_API_KEY` | Groq API key for AI README generation | ✅ |
+| `GROQ_README_MODEL` | Optional Groq model override for README generation | Optional |
 | `SITE_URL` | Public site URL used in metadata and sitemap | ✅ |
 | `PROFILE_NAME` | Name displayed across hero, layout, and footer | ✅ |
 | `CONTACT_EMAIL` | Contact email used in About, Contact, and Footer | ✅ |
@@ -178,6 +186,9 @@ src/
 | `INSTAGRAM_URL` | Footer Instagram link | Optional |
 | `MAPS_URL` | Map link used in contact cards | Optional |
 | `RESUME_URL` | Resume download URL for hero and resume sections | ✅ |
+| `GITINGEST_API_URL` | Optional gitingest endpoint override | Optional |
+| `GOOGLE_SITE_VERIFICATION` | Optional Google site verification token | Optional |
+| `ANALYTICS_ID` | Optional analytics identifier for integrations | Optional |
 
 ### **GitHub Token Setup**
 1. Go to GitHub Settings → Developer Settings → Personal Access Tokens

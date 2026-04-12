@@ -66,8 +66,7 @@ const education = [
 ];
 
 const RESUME_URL =
-  process.env.RESUME_URL ||
-  'https://drive.google.com/file/d/YOUR_FILE_ID/view?usp=drivesdk';
+  process.env.RESUME_URL?.trim() || '';
 
 export default function ResumeSection() {
   const prefersReducedMotion = useReducedMotion();
@@ -88,7 +87,11 @@ export default function ResumeSection() {
             competencies to solve complex challenges in technology-driven environments.
           </p>
           <Button
-            onClick={() => window.open(RESUME_URL, '_blank')}
+            onClick={() => {
+              if (!RESUME_URL) return;
+              window.open(RESUME_URL, '_blank', 'noopener,noreferrer');
+            }}
+            disabled={!RESUME_URL}
             className="interaction-enhanced group px-7"
             size="lg"
           >

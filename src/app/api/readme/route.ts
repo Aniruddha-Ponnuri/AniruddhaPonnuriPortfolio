@@ -3,10 +3,10 @@ import { generateReadme } from '@/app/lib/groq';
 
 // Maximum allowed payload size (100KB)
 const MAX_PAYLOAD_SIZE = 100 * 1024;
-// Maximum gitingest section lengths (50KB total)
-const MAX_GITINGEST_SUMMARY_LENGTH = 4 * 1024;
-const MAX_GITINGEST_TREE_LENGTH = 14 * 1024;
-const MAX_GITINGEST_CONTENT_LENGTH = 32 * 1024;
+// Maximum gitingest section lengths before LLM-level adaptive truncation
+const MAX_GITINGEST_SUMMARY_LENGTH = 2 * 1024;
+const MAX_GITINGEST_TREE_LENGTH = 8 * 1024;
+const MAX_GITINGEST_CONTENT_LENGTH = 16 * 1024;
 const GITINGEST_TIMEOUT_MS = 20_000;
 const GITINGEST_API_BASE = process.env.GITINGEST_API_URL || 'https://gitingest.com';
 
@@ -39,6 +39,17 @@ interface GitIngestData {
   summary: string;
   tree: string;
   content: string;
+}
+
+function isRateLimitOrTokenError(message: string): boolean {
+  const normalized = message.toLowerCase();
+  return (
+    normalized.includes('rate limit') ||
+    normalized.includes('rate_limit_exceeded') ||
+    normalized.includes('request too large') ||
+    normalized.includes('tokens per minute') ||
+    normalized.includes('413')
+  );
 }
 
 function isValidRepoData(data: unknown): data is RepoData {
@@ -273,6 +284,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'Invalid JSON payload' },
         { status: 400 }
+      );
+    }
+
+    if (error instanceof Error && isRateLimitOrTokenError(error.message)) {
+      log.warn('POST', 'Groq rate/token limit reached', { requestId, duration, error: error.message });
+      return NextResponse.json(
+        { error: 'README generation hit current token limits. Please try again with a smaller repository scope or retry shortly.' },
+        { status: 429 }
       );
     }
 
