@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/app/components/theme-provider';
 import { QueryProvider } from '@/app/components/query-provider';
 import { ErrorBoundary } from '@/app/components/ui/error-boundary';
 import Footer from '@/app/components/layout/footer';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ||
@@ -105,6 +106,7 @@ export default function RootLayout({
             </QueryProvider>
           </ErrorBoundary>
         </ThemeProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
