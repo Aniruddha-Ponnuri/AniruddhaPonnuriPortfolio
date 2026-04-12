@@ -9,171 +9,175 @@ import { useReducedMotion, getAnimationVariants } from '@/app/lib/responsive';
 import Image from 'next/image';
 import profileImage from '@/app/images/bg_2.png';
 
-const roles = [
-  "AI/ML Developer",
-  "Data Engineer",
-  "Problem Solver"
-];
+const roles = ['AI/ML Developer', 'Data Engineer', 'Problem Solver'];
 
 // Resume URL - configure via environment variable for easy updates
-const RESUME_URL = process.env.NEXT_PUBLIC_RESUME_URL || 'https://drive.google.com/file/d/11-GWxkz9SnZYHDrGXOaK03xjWDR_vHWb/view?usp=drivesdk';
+const RESUME_URL =
+  process.env.NEXT_PUBLIC_RESUME_URL ||
+  process.env.PUBLIC_RESUME_URL ||
+  'https://drive.google.com/file/d/YOUR_FILE_ID/view?usp=drivesdk';
 
 export default function HeroSection() {
   const [currentRole, setCurrentRole] = useState(0);
   const prefersReducedMotion = useReducedMotion();
   const animationVariants = getAnimationVariants(prefersReducedMotion);
+  const profileName = process.env.NEXT_PUBLIC_PROFILE_NAME || 'Ponnuri Aniruddha';
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentRole((prev) => (prev + 1) % roles.length);
-    }, prefersReducedMotion ? 5000 : 3000); // Slower transitions for reduced motion
+    }, prefersReducedMotion ? 5000 : 2800);
+
     return () => clearInterval(interval);
-  }, [prefersReducedMotion]);  return (
-    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-1/4 left-1/4 w-24 h-24 sm:w-32 sm:h-32 md:w-48 md:h-48 lg:w-64 lg:h-64 xl:w-72 xl:h-72 bg-primary/20 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob" />
-        <div className="absolute top-1/3 right-1/4 w-24 h-24 sm:w-32 sm:h-32 md:w-48 md:h-48 lg:w-64 lg:h-64 xl:w-72 xl:h-72 bg-secondary/20 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000" />
-        <div className="absolute bottom-1/4 left-1/3 w-24 h-24 sm:w-32 sm:h-32 md:w-48 md:h-48 lg:w-64 lg:h-64 xl:w-72 xl:h-72 bg-accent/20 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000" />
+  }, [prefersReducedMotion]);
+
+  return (
+    <section id="home" className="section-shell relative flex min-h-screen items-center justify-center overflow-hidden pt-16">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,color-mix(in_oklch,var(--primary)_24%,transparent),transparent_45%),radial-gradient(circle_at_85%_15%,color-mix(in_oklch,var(--accent)_28%,transparent),transparent_42%),radial-gradient(circle_at_48%_88%,color-mix(in_oklch,var(--secondary)_24%,transparent),transparent_46%)]" />
+        <div className="absolute left-[8%] top-[18%] h-56 w-56 rounded-full bg-primary/10 blur-3xl" />
+        <div className="absolute right-[10%] top-[10%] h-64 w-64 rounded-full bg-accent/15 blur-3xl" />
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 xl:gap-16 items-center justify-between text-center lg:text-left min-h-[calc(100vh-8rem)]">
-            {/* Text Content */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14 xl:gap-20">
+          <motion.div
+            {...animationVariants}
+            transition={{
+              duration: prefersReducedMotion ? 0.01 : 0.72,
+              delay: prefersReducedMotion ? 0 : 0.15,
+              ease: [0.23, 1, 0.32, 1],
+            }}
+            className="space-y-6 text-center lg:text-left"
+          >
             <motion.div
-              {...animationVariants}
-              transition={{ duration: prefersReducedMotion ? 0.01 : 0.8, delay: prefersReducedMotion ? 0 : 0.2 }}
-              className="space-y-4 sm:space-y-6 flex-1 max-w-2xl lg:max-w-3xl"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, delay: 0.25, ease: [0.23, 1, 0.32, 1] }}
+              className="inline-flex w-fit rounded-full border border-primary/35 bg-primary/8 px-3 py-1 text-sm font-medium text-primary"
             >
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="text-primary font-medium text-base sm:text-lg"
-              >
-                Hello! 👋
-              </motion.div>
-
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight"
-              >
-                I&apos;m{' '}
-                <span className="text-primary block sm:inline">
-                  Ponnuri Aniruddha
-                </span>
-              </motion.h1>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.5 }}
-                className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-muted-foreground h-8 sm:h-10 md:h-12 flex items-center justify-center lg:justify-start"
-              >
-                <span>An Aspiring </span>
-                <motion.span
-                  key={currentRole}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.5 }}
-                  className="text-primary ml-2 font-semibold"
-                >
-                  {roles[currentRole]}
-                </motion.span>
-              </motion.div>
-
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.6 }}
-                className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0 leading-relaxed"
-              >
-                Passionate about creating innovative solutions using AI/ML technologies 
-                and building scalable data engineering systems that make a difference.
-              </motion.p>              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.7 }}
-                className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start max-w-md mx-auto lg:mx-0 pt-4"
-              >
-                <Button
-                  size="lg"
-                  onClick={() => scrollToSection('projects')}
-                  className="group w-full sm:w-auto text-sm sm:text-base px-6 py-3 sm:px-8 sm:py-4"
-                >
-                  View My Work
-                  <ArrowDown className="ml-2 h-4 w-4 transition-transform group-hover:translate-y-1" />
-                </Button>
-                
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => window.open(RESUME_URL, '_blank')}
-                  className="group w-full sm:w-auto text-sm sm:text-base px-6 py-3 sm:px-8 sm:py-4"
-                >
-                  <Download className="mr-2 h-4 w-4 transition-transform group-hover:translate-y-1" />
-                  Download Resume
-                </Button>
-              </motion.div>
-            </motion.div>            {/* Image/Visual Content */}
-            <motion.div
-              initial={{ opacity: 0, x: prefersReducedMotion ? 0 : 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: prefersReducedMotion ? 0.01 : 0.8, delay: prefersReducedMotion ? 0 : 0.4 }}
-              className="relative flex-shrink-0"
-            >
-              <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 mx-auto">
-                <motion.div
-                  animate={prefersReducedMotion ? {} : { 
-                    rotate: 360,
-                  }}
-                  transition={prefersReducedMotion ? {} : { 
-                    duration: 20, 
-                    repeat: Infinity, 
-                    ease: "linear" 
-                  }}
-                  className="absolute inset-0 rounded-full border-2 border-dashed border-primary/30"
-                />
-                
-                <motion.div
-                  whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                  className="relative z-10 aspect-square rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 p-4 sm:p-6 md:p-8 backdrop-blur-sm border border-border/50"
-                >
-                  <div className="w-full h-full rounded-full overflow-hidden bg-gradient-to-br from-background to-muted flex items-center justify-center relative">
-                    <Image
-                      src={profileImage}
-                      alt="Ponnuri Aniruddha - Profile Picture"
-                      fill
-                      className="object-cover rounded-full"
-                      priority
-                    />
-                  </div>
-                </motion.div>
-              </div>
+              Hello, I build useful AI products
             </motion.div>
-          </div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: 0.3, ease: [0.23, 1, 0.32, 1] }}
+              className="section-title text-4xl font-semibold leading-[1.03] sm:text-5xl md:text-6xl lg:text-7xl"
+            >
+              I&apos;m{' '}
+              <span className="bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
+                {profileName}
+              </span>
+            </motion.h1>
+
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.36, delay: 0.38, ease: [0.23, 1, 0.32, 1] }}
+              className="flex h-11 items-center justify-center text-lg text-muted-foreground sm:text-xl md:h-12 md:text-2xl lg:justify-start"
+            >
+              <span>An Aspiring</span>
+              <motion.span
+                key={currentRole}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.32, ease: [0.23, 1, 0.32, 1] }}
+                className="ml-2 font-semibold text-primary"
+              >
+                {roles[currentRole]}
+              </motion.span>
+            </motion.div>
+
+            <motion.p
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.46, ease: [0.23, 1, 0.32, 1] }}
+              className="section-lead mx-auto max-w-2xl text-base leading-relaxed sm:text-lg lg:mx-0"
+            >
+              Passionate about creating innovative solutions using AI/ML technologies and building scalable
+              data engineering systems that make a measurable difference.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.42, delay: 0.54, ease: [0.23, 1, 0.32, 1] }}
+              className="flex flex-col justify-center gap-3 pt-2 sm:flex-row lg:justify-start"
+            >
+              <Button
+                size="lg"
+                onClick={() => scrollToSection('projects')}
+                className="interaction-enhanced group w-full sm:w-auto"
+              >
+                View My Work
+                <ArrowDown className="ml-2 h-4 w-4 transition-transform duration-150 group-hover:translate-y-1" />
+              </Button>
+
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={() => window.open(RESUME_URL, '_blank')}
+                className="interaction-enhanced group w-full sm:w-auto"
+              >
+                <Download className="mr-2 h-4 w-4 transition-transform duration-150 group-hover:translate-y-1" />
+                Download Resume
+              </Button>
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: prefersReducedMotion ? 0 : 36 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{
+              duration: prefersReducedMotion ? 0.01 : 0.68,
+              delay: prefersReducedMotion ? 0 : 0.25,
+              ease: [0.23, 1, 0.32, 1],
+            }}
+            className="relative mx-auto"
+          >
+            <div className="relative h-72 w-72 sm:h-80 sm:w-80 md:h-96 md:w-96">
+              <motion.div
+                animate={prefersReducedMotion ? {} : { rotate: 360 }}
+                transition={prefersReducedMotion ? {} : { duration: 22, repeat: Infinity, ease: 'linear' }}
+                className="absolute inset-0 rounded-full border border-dashed border-primary/35"
+              />
+
+              <motion.div
+                whileHover={prefersReducedMotion ? {} : { scale: 1.03 }}
+                transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
+                className="surface-card relative z-10 aspect-square rounded-full border border-border/60 bg-gradient-to-br from-primary/18 via-secondary/15 to-accent/14 p-4 backdrop-blur-md sm:p-6 md:p-8"
+              >
+                <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-background via-background to-muted">
+                  <Image
+                    src={profileImage}
+                    alt="Ponnuri Aniruddha - Profile Picture"
+                    fill
+                    sizes="(max-width: 640px) 18rem, (max-width: 768px) 20rem, 24rem"
+                    className="rounded-full object-cover"
+                    priority
+                  />
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
         </div>
       </div>
 
-      {/* Scroll Indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 1 }}
-        className="absolute bottom-6 sm:bottom-8 left-1/2 transform -translate-x-1/2 hidden sm:block"
+        transition={{ duration: 0.35, delay: 0.95 }}
+        className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 sm:block"
       >
         <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 1.9, repeat: Infinity }}
           className="cursor-pointer"
           onClick={() => scrollToSection('about')}
         >
-          <ArrowDown className="h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground hover:text-primary transition-colors" />
+          <ArrowDown className="h-6 w-6 text-muted-foreground transition-colors duration-150 hover:text-primary" />
         </motion.div>
       </motion.div>
     </section>

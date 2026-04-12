@@ -1,7 +1,5 @@
 /* src/styles/globals.css */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
@@ -104,15 +102,15 @@ body {
 
 /* Interactive element enhancements */
 .interaction-enhanced {
-  @apply transition-all duration-300 ease-out;
+  @apply transition-[transform,box-shadow] duration-200 ease-out;
 }
 
 .interaction-enhanced:hover {
-  @apply scale-105;
+  @apply scale-[1.02];
 }
 
 .interaction-enhanced:active {
-  @apply scale-95;
+  @apply scale-[0.98];
 }
 
 @media (prefers-reduced-motion: reduce) {

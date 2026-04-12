@@ -15,6 +15,12 @@ export interface GitHubRepo {
   updated_at: string;
   pushed_at: string;
   topics: string[];
+  license: {
+    key: string;
+    name: string;
+    spdx_id: string;
+    url: string | null;
+  } | null;
   visibility: 'public' | 'private';
   archived: boolean;
   disabled: boolean;

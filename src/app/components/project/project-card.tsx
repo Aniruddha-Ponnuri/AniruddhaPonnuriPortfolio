@@ -45,25 +45,27 @@ export function ProjectCardComponent({ project, onGenerateReadme }: ProjectCardP
   };
 
   const layout = getCardLayout();
+  const resolvedReadme = project.readme || generatedReadme;
 
   return (
     <Card 
       ref={cardRef}
-      className={`h-full @container transition-all duration-300 ${
-        prefersReducedMotion ? 'hover:shadow-lg' : 'hover:shadow-lg hover:-translate-y-1'
+      className={`h-full @container ${
+        prefersReducedMotion ? 'hover:shadow-lg' : 'hover:-translate-y-1 hover:shadow-xl'
       }`}
-    >      <CardHeader>
+    >
+      <CardHeader>
         <div className="flex items-start justify-between">
           <div className="space-y-1">
-            <CardTitle className={layout.titleSize}>
+            <CardTitle className={`${layout.titleSize} section-title`}>
               <a
                 href={project.html_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:underline flex items-center gap-2"
+                className="group flex items-center gap-2 transition-[color] duration-150 ease-[var(--ease-out)] hover:text-primary"
               >
                 {project.name}
-                <ExternalLink className="h-4 w-4" />
+                <ExternalLink className="h-4 w-4 transition-transform duration-150 ease-[var(--ease-out)] group-hover:translate-x-0.5" />
               </a>
             </CardTitle>
             <CardDescription className="line-clamp-2 @sm:line-clamp-3">
@@ -72,11 +74,11 @@ export function ProjectCardComponent({ project, onGenerateReadme }: ProjectCardP
           </div>
         </div>
       </CardHeader>
-        <CardContent className="space-y-4">
+      <CardContent className="space-y-4">
         {/* Tags */}
         <div className="flex flex-wrap gap-1 @sm:gap-2">
           {project.tags.map((tag) => (
-            <Badge key={tag} variant="secondary" className="text-xs @sm:text-sm">
+            <Badge key={tag} variant="secondary" className="text-xs @sm:text-sm px-2.5 py-1">
               {tag}
             </Badge>
           ))}
@@ -139,7 +141,7 @@ export function ProjectCardComponent({ project, onGenerateReadme }: ProjectCardP
               </DialogHeader>
               
               <div className="flex-1 overflow-y-auto space-y-4 mt-4 pr-2">
-                {project.readme ? (
+                {resolvedReadme ? (
                   <div className="prose prose-xs sm:prose-sm max-w-none dark:prose-invert prose-headings:scroll-mt-20 prose-p:leading-relaxed prose-pre:max-w-full prose-pre:overflow-x-auto prose-img:rounded-lg prose-img:shadow-md">
                     <ReactMarkdown
                       components={{
@@ -151,7 +153,7 @@ export function ProjectCardComponent({ project, onGenerateReadme }: ProjectCardP
                         script: () => null,
                       }}
                     >
-                      {project.readme}
+                      {resolvedReadme}
                     </ReactMarkdown>
                   </div>
                 ) : (
@@ -167,26 +169,6 @@ export function ProjectCardComponent({ project, onGenerateReadme }: ProjectCardP
                     >
                       {isGenerating ? 'Generating...' : 'Generate README with AI'}
                     </Button>
-                  </div>
-                )}
-                
-                {generatedReadme && (
-                  <div className="mt-6 border-t pt-4">
-                    <h3 className="text-base sm:text-lg font-semibold mb-2">AI-Generated README</h3>
-                    <div className="prose prose-xs sm:prose-sm max-w-none dark:prose-invert prose-headings:scroll-mt-20 prose-p:leading-relaxed prose-pre:max-w-full prose-pre:overflow-x-auto prose-img:rounded-lg prose-img:shadow-md">
-                      <ReactMarkdown
-                        components={{
-                          // Sanitize links
-                          a: ({ ...props }) => (
-                            <a {...props} target="_blank" rel="noopener noreferrer" />
-                          ),
-                          // Prevent script tags
-                          script: () => null,
-                        }}
-                      >
-                        {generatedReadme}
-                      </ReactMarkdown>
-                    </div>
                   </div>
                 )}
               </div>

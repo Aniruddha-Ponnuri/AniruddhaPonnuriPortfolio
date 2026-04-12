@@ -14,8 +14,7 @@ export default function AboutPage() {
       opacity: 1, 
       y: 0,
       transition: {
-        duration: prefersReducedMotion ? 0 : 0.6,
-        ease: 'easeOut'
+        duration: prefersReducedMotion ? 0 : 0.6
       }
     },
     exit: { 
@@ -33,7 +32,7 @@ export default function AboutPage() {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20"
+      className="min-h-screen bg-background"
     >
       <Navigation />
       

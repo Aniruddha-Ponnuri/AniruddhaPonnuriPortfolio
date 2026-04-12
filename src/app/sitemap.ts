@@ -1,7 +1,10 @@
 import { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://aniruddhaponnuri.vercel.app';
+  const baseUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.PUBLIC_APP_URL ||
+    'https://aniruddhaponnuri.vercel.app';
 
   return [
     {

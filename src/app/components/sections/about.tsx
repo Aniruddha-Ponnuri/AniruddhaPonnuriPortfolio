@@ -8,12 +8,15 @@ import { useReducedMotion } from '@/app/lib/responsive';
 import Image from 'next/image';
 import profileImage from '@/app/images/bg_2.png';
 
+const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'aniruddha.ponnuri@gmail.com';
+const locationLabel = process.env.NEXT_PUBLIC_LOCATION || 'Chennai, India';
+const profileName = process.env.NEXT_PUBLIC_PROFILE_NAME || 'Ponnuri Aniruddha';
 
 const personalInfo = [
-  { label: 'Name', value: 'Ponnuri Aniruddha', icon: User },
+  { label: 'Name', value: profileName, icon: User },
   { label: 'Date of Birth', value: 'June 13, 2003', icon: Calendar },
-  { label: 'Email', value: 'aniruddha.ponnuri@gmail.com', icon: Mail },
-  { label: 'Location', value: 'Chennai, India', icon: MapPin },
+  { label: 'Email', value: contactEmail, icon: Mail },
+  { label: 'Location', value: locationLabel, icon: MapPin },
 ];
 
 const interests = [
@@ -27,46 +30,49 @@ const interests = [
 
 export default function AboutSection() {
   const prefersReducedMotion = useReducedMotion();
+
   return (
-    <section id="about" className="py-20 bg-muted/50 relative overflow-hidden">
-      {/* Additional background effects */}
-      <div className="absolute inset-0 -z-5">
-        <div className="absolute top-1/4 right-1/4 w-32 h-32 md:w-48 md:h-48 bg-primary/10 rounded-full mix-blend-multiply filter blur-xl opacity-70" />
-        <div className="absolute bottom-1/3 left-1/4 w-32 h-32 md:w-48 md:h-48 bg-secondary/10 rounded-full mix-blend-multiply filter blur-xl opacity-70" />
+    <section id="about" className="section-shell relative overflow-hidden bg-muted/35">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute right-1/4 top-1/4 h-44 w-44 rounded-full bg-primary/12 blur-3xl" />
+        <div className="absolute bottom-1/3 left-1/4 h-44 w-44 rounded-full bg-secondary/14 blur-3xl" />
       </div>
-      
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: prefersReducedMotion ? 0.01 : 0.5 }}
-          className="text-center mb-16"
+          transition={{ duration: prefersReducedMotion ? 0.01 : 0.45 }}
+          className="mb-16 text-center"
         >
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">About Me</h2>
-          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto">
-            Get to know more about who I am, what I do, and what motivates me
+          <h2 className="section-title mb-4 text-3xl font-semibold sm:text-4xl lg:text-5xl">About Me</h2>
+          <p className="section-lead mx-auto text-base sm:text-lg lg:text-xl">
+            Get to know more about who I am, what I do, and what motivates me.
           </p>
         </motion.div>
 
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-center">
-            {/* Left Column - Image and Quick Info */}            <motion.div
-              initial={{ opacity: 0, x: prefersReducedMotion ? 0 : -50 }}
+        <div className="mx-auto max-w-7xl">
+          <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-12 xl:gap-16">
+            <motion.div
+              initial={{ opacity: 0, x: prefersReducedMotion ? 0 : -40 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: prefersReducedMotion ? 0.01 : 0.6 }}
+              transition={{ duration: prefersReducedMotion ? 0.01 : 0.5 }}
               className="space-y-6 lg:space-y-8"
-            ><div className="relative">                <motion.div
+            >
+              <div className="relative">
+                <motion.div
                   whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                  className="aspect-square max-w-xs sm:max-w-sm md:max-w-md mx-auto rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 p-1 overflow-hidden"
+                  transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
+                  className="surface-card mx-auto aspect-square max-w-xs overflow-hidden rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 p-1 sm:max-w-sm md:max-w-md"
                 >
-                  <div className="w-full h-full rounded-2xl bg-background overflow-hidden relative">
+                  <div className="relative h-full w-full overflow-hidden rounded-2xl bg-background">
                     <Image
                       src={profileImage}
-                      alt="Ponnuri Aniruddha"
+                      alt={profileName}
                       fill
+                      sizes="(max-width: 640px) 20rem, (max-width: 768px) 24rem, (max-width: 1024px) 28rem, 32rem"
                       className="object-cover"
                       priority
                     />
@@ -75,24 +81,22 @@ export default function AboutSection() {
               </div>
 
               <Card className="mx-auto max-w-md">
-                <CardContent className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                <CardContent className="space-y-3 p-4 sm:space-y-4 sm:p-6">
                   {personalInfo.map((info, index) => {
                     const Icon = info.icon;
-                    return (                      <motion.div
+                    return (
+                      <motion.div
                         key={info.label}
                         initial={{ opacity: 0, x: prefersReducedMotion ? 0 : -20 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        transition={{ 
-                          duration: prefersReducedMotion ? 0.01 : 0.5, 
-                          delay: prefersReducedMotion ? 0 : index * 0.1 
-                        }}
+                        transition={{ duration: prefersReducedMotion ? 0.01 : 0.3, delay: prefersReducedMotion ? 0 : index * 0.06 }}
                         className="flex items-center space-x-3"
                       >
-                        <Icon className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
-                        <div className="flex-1 min-w-0">
-                          <span className="text-xs sm:text-sm text-muted-foreground">{info.label}:</span>
-                          <span className="ml-2 font-medium text-sm sm:text-base break-words">{info.value}</span>
+                        <Icon className="h-4 w-4 flex-shrink-0 text-primary sm:h-5 sm:w-5" />
+                        <div className="min-w-0 flex-1">
+                          <span className="text-xs text-muted-foreground sm:text-sm">{info.label}:</span>
+                          <span className="ml-2 break-words text-sm font-medium sm:text-base">{info.value}</span>
                         </div>
                       </motion.div>
                     );
@@ -101,51 +105,44 @@ export default function AboutSection() {
               </Card>
             </motion.div>
 
-            {/* Right Column - Description and Interests */}            <motion.div
-              initial={{ opacity: 0, x: prefersReducedMotion ? 0 : 50 }}
+            <motion.div
+              initial={{ opacity: 0, x: prefersReducedMotion ? 0 : 40 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: prefersReducedMotion ? 0.01 : 0.6 }}
+              transition={{ duration: prefersReducedMotion ? 0.01 : 0.5 }}
               className="space-y-6 lg:space-y-8"
             >
               <div className="space-y-4 lg:space-y-6">
-                <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold">Who I Am</h3>
-                <div className="space-y-4 text-sm sm:text-base lg:text-lg text-muted-foreground leading-relaxed">
+                <h3 className="section-title text-xl font-semibold sm:text-2xl lg:text-3xl">Who I Am</h3>
+                <div className="space-y-4 text-sm leading-relaxed text-muted-foreground sm:text-base lg:text-lg">
                   <p>
-                    Dynamic and detail-oriented Computer Science Engineering student 
-                    specializing in <strong className="text-foreground">Artificial Intelligence and Data Analysis</strong>. 
-                    I&apos;m passionate about leveraging cutting-edge technologies to solve 
-                    complex real-world problems.
+                    Dynamic and detail-oriented Computer Science Engineering student specializing in{' '}
+                    <strong className="text-foreground">Artificial Intelligence and Data Analysis</strong>. I am
+                    passionate about leveraging modern technologies to solve complex real-world problems.
                   </p>
                   <p>
-                    Currently pursuing my Bachelor&apos;s degree at SRM Institute of Science 
-                    and Technology, Chennai, with a strong focus on AI/ML, data engineering, 
-                    and full-stack development. I&apos;ve gained practical experience through 
-                    internships and research projects.
+                    I am currently pursuing my integrated M.Tech at SRM Institute of Science and Technology, Chennai,
+                    with a strong focus on AI/ML, data engineering, and full-stack development.
                   </p>
                   <p>
-                    My journey in technology is driven by curiosity and a desire to create 
-                    innovative solutions that make a positive impact. I enjoy working on 
-                    projects that challenge me to think creatively and push the boundaries 
-                    of what&apos;s possible.
+                    My journey in technology is driven by curiosity and the desire to build systems that create real,
+                    measurable impact.
                   </p>
                 </div>
               </div>
 
               <div className="space-y-4 lg:space-y-6">
-                <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold">My Interests</h3>
+                <h3 className="section-title text-xl font-semibold sm:text-2xl lg:text-3xl">My Interests</h3>
                 <div className="flex flex-wrap gap-2 sm:gap-3">
-                  {interests.map((interest, index) => (                    <motion.div
+                  {interests.map((interest, index) => (
+                    <motion.div
                       key={interest}
-                      initial={{ opacity: 0, scale: prefersReducedMotion ? 1 : 0.8 }}
+                      initial={{ opacity: 0, scale: prefersReducedMotion ? 1 : 0.95 }}
                       whileInView={{ opacity: 1, scale: 1 }}
                       viewport={{ once: true }}
-                      transition={{ 
-                        duration: prefersReducedMotion ? 0.01 : 0.3, 
-                        delay: prefersReducedMotion ? 0 : index * 0.1 
-                      }}
+                      transition={{ duration: prefersReducedMotion ? 0.01 : 0.24, delay: prefersReducedMotion ? 0 : index * 0.04 }}
                     >
-                      <Badge variant="secondary" className="px-2 py-1 sm:px-3 sm:py-1 text-xs sm:text-sm">
+                      <Badge variant="secondary" className="px-2 py-1 text-xs sm:px-3 sm:text-sm">
                         {interest}
                       </Badge>
                     </motion.div>
@@ -154,17 +151,16 @@ export default function AboutSection() {
               </div>
 
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 14 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="p-4 sm:p-6 bg-primary/5 rounded-lg border border-primary/20"
+                transition={{ duration: prefersReducedMotion ? 0.01 : 0.4, delay: prefersReducedMotion ? 0 : 0.1 }}
+                className="surface-card rounded-xl border border-primary/25 p-4 sm:p-6"
               >
-                <h4 className="font-semibold text-primary mb-2 text-sm sm:text-base lg:text-lg">Current Focus</h4>
-                <p className="text-xs sm:text-sm lg:text-base text-muted-foreground leading-relaxed">
-                  Working on AI-driven personalized intervention strategies for tackling 
-                  child obesity and developing innovative data analysis solutions using 
-                  machine learning algorithms.
+                <h4 className="mb-2 text-sm font-semibold text-primary sm:text-base lg:text-lg">Current Focus</h4>
+                <p className="text-xs leading-relaxed text-muted-foreground sm:text-sm lg:text-base">
+                  Working on AI-driven personalized intervention strategies for tackling child obesity and developing
+                  robust data analysis solutions with machine learning algorithms.
                 </p>
               </motion.div>
             </motion.div>

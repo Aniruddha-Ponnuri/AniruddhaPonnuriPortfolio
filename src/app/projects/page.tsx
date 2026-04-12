@@ -12,8 +12,14 @@ import { ClientOnly } from '@/app/components/ui/client-only';
 import { useReducedMotion, useContainerQuery } from '@/app/lib/responsive';
 import { ProjectCard, SearchFilters } from '@/app/types';
 
+const GITHUB_USERNAME =
+  process.env.NEXT_PUBLIC_GITHUB_USERNAME ||
+  process.env.PUBLIC_GITHUB_USERNAME ||
+  'Aniruddha-Ponnuri';
+
 const fetchGitHubData = async () => {
-  const response = await fetch('/api/github');
+  const params = new URLSearchParams({ username: GITHUB_USERNAME });
+  const response = await fetch(`/api/github?${params.toString()}`);
   if (!response.ok) {
     throw new Error('Failed to fetch GitHub data');
   }
@@ -43,10 +49,17 @@ export default function ProjectsPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          repoName: project.name,
-          description: project.description,
-          language: project.language,
-          topics: project.topics || [],
+          repoData: {
+            name: project.name,
+            fullName: project.full_name,
+            repoUrl: project.html_url,
+            description: project.description,
+            language: project.language,
+            languages: project.languages || {},
+            topics: project.topics || [],
+            homepage: project.homepage,
+            license: project.license?.spdx_id || project.license?.name || null,
+          },
         }),
       });
 
@@ -54,8 +67,8 @@ export default function ProjectsPage() {
         throw new Error('Failed to generate README');
       }
 
-      const data = await response.json();
-      return data.readme;
+      const { readme } = await response.json();
+      return readme;
     } catch (error) {
       console.error('Error generating README:', error);
       return 'Failed to generate README. Please try again.';
@@ -63,7 +76,7 @@ export default function ProjectsPage() {
   };
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['github-data'],
+    queryKey: ['github-data', GITHUB_USERNAME],
     queryFn: fetchGitHubData,
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes (replaces cacheTime in newer versions)
@@ -80,9 +93,14 @@ export default function ProjectsPage() {
     
     // Responsive breakpoints with content-aware adjustments
     if (width >= 1536) { // 2xl
-      return projectCount >= 4 ? 'grid-cols-4' : `grid-cols-${Math.min(projectCount, 3)}`;
+      if (projectCount >= 4) return 'grid-cols-4';
+      if (projectCount === 3) return 'grid-cols-3';
+      if (projectCount === 2) return 'grid-cols-2';
+      return 'grid-cols-1';
     } else if (width >= 1280) { // xl
-      return projectCount >= 3 ? 'grid-cols-3' : `grid-cols-${Math.min(projectCount, 2)}`;
+      if (projectCount >= 3) return 'grid-cols-3';
+      if (projectCount === 2) return 'grid-cols-2';
+      return 'grid-cols-1';
     } else if (width >= 1024) { // lg
       return projectCount >= 2 ? 'grid-cols-2' : 'grid-cols-1';
     } else if (width >= 768) { // md
@@ -156,8 +174,7 @@ export default function ProjectsPage() {
       opacity: 1, 
       y: 0,
       transition: {
-        duration: prefersReducedMotion ? 0 : 0.6,
-        ease: 'easeOut'
+        duration: prefersReducedMotion ? 0 : 0.6
       }
     },
     exit: { 
@@ -186,7 +203,7 @@ export default function ProjectsPage() {
         initial="initial"
         animate="animate"
         exit="exit"
-        className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20"
+        className="min-h-screen bg-background"
       >
         <GitHubHeader user={data?.user || null} />
         <Navigation />
@@ -212,7 +229,7 @@ export default function ProjectsPage() {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20"
+      className="min-h-screen bg-background"
     >
       <GitHubHeader user={data?.user || null} />
       <Navigation />
@@ -222,7 +239,7 @@ export default function ProjectsPage() {
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12">
               <motion.h1 
-                className="text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent"
+                className="section-title mb-4 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-4xl font-semibold text-transparent sm:text-5xl"
                 initial={{ opacity: 0, y: prefersReducedMotion ? 0 : -20 }}
                 animate={{ 
                   opacity: 1, 
@@ -233,7 +250,7 @@ export default function ProjectsPage() {
                 My Projects
               </motion.h1>
               <motion.p 
-                className="text-lg text-muted-foreground max-w-2xl mx-auto"
+                className="section-lead mx-auto max-w-2xl text-lg"
                 initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
                 animate={{ 
                   opacity: 1, 
@@ -275,7 +292,7 @@ export default function ProjectsPage() {
               variants={containerVariants}
               initial="hidden"
               animate="visible"
-              className={`grid gap-6 mt-8 transition-all duration-300 ${getGridColumns()}`}
+              className={`mt-8 grid gap-6 transition-[opacity] duration-200 ${getGridColumns()}`}
             >
               {isLoading ? (
                 Array.from({ length: 6 }).map((_, index) => (

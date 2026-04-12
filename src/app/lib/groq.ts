@@ -30,8 +30,15 @@ export async function generateReadme(
     languages: Record<string, number>;
     topics: string[];
     homepage: string | null;
+    fullName?: string;
+    repoUrl?: string;
+    license?: string | null;
   },
-  gitingestOutput: string
+  gitingestData: {
+    summary: string;
+    tree: string;
+    content: string;
+  }
 ): Promise<string> {
   const startTime = Date.now();
   log.info('generateReadme', 'Starting README generation', { repoName: repoData.name });
@@ -43,43 +50,63 @@ export async function generateReadme(
   }
 
   try {
-    const prompt = `Generate a comprehensive, professional README.md for a GitHub repository.
+    const prompt = `Create a README.md using only verified information.
 
-Use the following context obtained from the repository using gitingest:
----
-${gitingestOutput}
----
+  Rules (must follow):
+  1. Rely exclusively on details from "Gitingest Tree", "Gitingest Content", "Gitingest Summary", and "Repository Metadata".  
+  2. Do not assume or fabricate features, dependencies, setup steps, filenames, links, badges, or system design.  
+  3. If any detail is unavailable, omit it or state "Not specified in repository sources".  
+  4. Ensure the output is valid Markdown only.  
+  5. Respond with Markdown format only (no additional text outside Markdown).  
+  6. Always include a License section. If license metadata exists, reproduce it exactly; otherwise write: "License: Not specified in repository sources."
+  Repository Metadata:
+  - Name: ${repoData.name}
+  - Full Name: ${repoData.fullName || 'Not specified'}
+  - Repo URL: ${repoData.repoUrl || 'Not specified'}
+  - Description: ${repoData.description || 'Not specified'}
+  - Primary Language: ${repoData.language || 'Not specified'}
+  - All Languages: ${Object.keys(repoData.languages).join(', ') || 'Not specified'}
+  - Topics: ${repoData.topics.join(', ') || 'Not specified'}
+  - Homepage: ${repoData.homepage || 'Not specified'}
+  - License: ${repoData.license || 'Not specified'}
 
-Use the gitingest output as the primary source of truth. Also use the following metadata to enrich the README:
+  Gitingest Summary:
+  ---
+  ${gitingestData.summary || 'Not specified in repository sources'}
+  ---
 
-Repository Name: ${repoData.name}
-Description: ${repoData.description || 'No description provided'}
-Primary Language: ${repoData.language || 'Not specified'}
-All Languages: ${Object.keys(repoData.languages).join(', ') || 'Not available'}
-Topics/Tags: ${repoData.topics.join(', ') || 'None'}
-Live Demo: ${repoData.homepage || 'Not available'}
+  Gitingest Tree:
+  ---
+  ${gitingestData.tree || 'Not specified in repository sources'}
+  ---
 
-Please create a well-structured README that includes:
-1. Project title and brief description
-2. Features section (infer from the gitingest output)
-3. Technologies used (based on languages and gitingest output)
-4. Installation instructions
-5. Usage examples
-6. Contributing guidelines
-7. License information
+  Gitingest Content:
+  ---
+  ${gitingestData.content || 'Not specified in repository sources'}
+  ---
 
-Make it engaging, professional, and follow modern README best practices. Use proper Markdown formatting with badges, sections, and clear structure.`;
+  Suggested section order:
+  - Title
+  - Overview
+  - Features
+  - Tech Stack
+  - Installation
+  - Usage
+  - Contributing
+  - License`;
 
     log.info('generateReadme', 'Sending request to Groq API', {
       model: 'llama-3.1-8b-instant',
       promptLength: prompt.length,
+      gitingestTreeLength: gitingestData.tree.length,
+      gitingestContentLength: gitingestData.content.length,
     });
 
     const chatCompletion = await groq.chat.completions.create({
       messages: [
         {
           role: 'system',
-          content: 'You are a technical writer expert at creating comprehensive, professional README files for GitHub repositories. You will be provided with a repository digest from a tool called "gitingest" as the primary context. Create detailed, well-structured documentation that follows best practices, using the gitingest output as the main source of truth.',
+          content: 'You are a precise technical documentation writer. Produce clean Markdown only. Never hallucinate. If data is not present in provided sources, say "Not specified in repository sources" or omit that detail.',
         },
         {
           role: 'user',
@@ -87,7 +114,7 @@ Make it engaging, professional, and follow modern README best practices. Use pro
         },
       ],
       model: 'llama-3.1-8b-instant',
-      temperature: 0.7,
+      temperature: 0.2,
       max_tokens: 2048,
     });
 

@@ -38,7 +38,9 @@ export function Navigation() {
       const scrolled = window.scrollY;
       const progress = (scrolled / scrollHeight) * 100;
       setScrollProgress(progress);
-    };    // Intersection Observer for active section
+    };
+
+    // Intersection Observer for active section
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -81,15 +83,17 @@ export function Navigation() {
   };
 
   return (
-    <header className="fixed w-full bg-background/95 backdrop-blur z-50 border-b">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-border/70 bg-background/70 backdrop-blur-xl supports-[backdrop-filter]:bg-background/55">
       {/* Progress bar */}
       <div
-        className="absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-150 ease-out"
+        className="absolute bottom-0 left-0 h-px bg-gradient-to-r from-primary via-secondary to-accent transition-[width] duration-150 ease-[var(--ease-out)]"
         style={{ width: `${scrollProgress}%` }}
       />
       
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">          {/* Logo */}          <motion.div
+        <div className="flex h-16 items-center justify-between">
+          {/* Logo */}
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             className="flex-shrink-0"
@@ -99,7 +103,7 @@ export function Navigation() {
               onClick={(e) => handleNavClick('#home', e)}
               className="flex items-center space-x-2"
             >
-              <div className="relative w-8 h-8 rounded-full overflow-hidden border-2 border-primary/20 hover:border-primary/40 transition-all duration-200">
+              <div className="relative h-9 w-9 overflow-hidden rounded-full border border-primary/35 shadow-[0_10px_24px_color-mix(in_oklch,var(--primary)_30%,transparent)] transition-[transform,border-color] duration-180 ease-[var(--ease-out)] hover:scale-[1.04] hover:border-primary/60">
                 <Image
                   src={profileImage}
                   alt="Ponnuri Aniruddha"
@@ -108,7 +112,7 @@ export function Navigation() {
                   sizes="32px"
                 />
               </div>
-              <span className="font-bold text-primary hidden sm:block">Aniruddha</span>
+              <span className="hidden font-semibold tracking-tight text-foreground sm:block">Aniruddha</span>
             </Link>
           </motion.div>
 
@@ -127,10 +131,9 @@ export function Navigation() {
                         href={item.href} 
                         onClick={(e) => handleNavClick(item.href, e)}
                         className={cn(
-                          "px-3 py-2 rounded-md hover:text-primary transition-all duration-200 relative group",
-                          "text-sm font-medium",
+                          "relative rounded-md px-3 py-2 text-sm font-medium transition-[color] duration-150 ease-[var(--ease-out)]",
                           activeSection === item.href.substring(1) 
-                            ? "text-primary" 
+                            ? "text-foreground" 
                             : "text-muted-foreground hover:text-foreground"
                         )}
                       >
@@ -138,7 +141,7 @@ export function Navigation() {
                         {activeSection === item.href.substring(1) && (
                           <motion.div
                             layoutId="activeSection"
-                            className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full"
+                            className="absolute -bottom-[7px] left-0 right-0 h-[2px] rounded-full bg-gradient-to-r from-primary via-primary to-secondary"
                             transition={{ type: "spring", stiffness: 380, damping: 30 }}
                           />
                         )}
@@ -158,7 +161,7 @@ export function Navigation() {
                 variant="ghost"
                 size="sm"
                 onClick={toggleTheme}
-                className="p-2"
+                className="h-9 w-9 rounded-full border border-border/70 p-0"
                 aria-label="Toggle theme"
               >
                 {theme === 'dark' ? (
@@ -175,14 +178,15 @@ export function Navigation() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="md:hidden p-2"
+                  className="h-9 w-9 rounded-full border border-border/70 p-0 md:hidden"
                   aria-label="Open menu"
                 >
                   <Menu className="h-5 w-5" />
                 </Button>
-              </SheetTrigger>              <SheetContent side="right" className="w-64 p-0">
+              </SheetTrigger>
+              <SheetContent side="right" className="w-64 p-0">
                 <div className="flex flex-col h-full">
-                  <div className="flex items-center justify-between p-4 border-b">
+                  <div className="flex items-center justify-between border-b border-border/70 p-4">
                     <div className="flex items-center space-x-2">
                       <div className="relative w-6 h-6 rounded-full overflow-hidden border border-primary/20">
                         <Image
@@ -209,9 +213,9 @@ export function Navigation() {
                             href={item.href}
                             onClick={(e) => handleNavClick(item.href, e)}
                             className={cn(
-                              "block px-3 py-2 rounded-md text-base font-medium transition-colors",
+                              "block rounded-md px-3 py-2 text-base font-medium transition-[background-color,color,transform] duration-150 ease-[var(--ease-out)] active:scale-[0.98]",
                               activeSection === item.href.substring(1)
-                                ? "text-primary bg-primary/10"
+                                ? "bg-primary/12 text-primary"
                                 : "text-muted-foreground hover:text-foreground hover:bg-muted"
                             )}
                           >

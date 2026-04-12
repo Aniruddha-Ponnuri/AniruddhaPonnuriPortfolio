@@ -1,21 +1,27 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Inter_Tight, JetBrains_Mono } from 'next/font/google';
+import { Manrope, Space_Grotesk, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/app/components/theme-provider';
 import { QueryProvider } from '@/app/components/query-provider';
 import { ErrorBoundary } from '@/app/components/ui/error-boundary';
 import Footer from '@/app/components/layout/footer';
 
-// Variable fonts for better text scaling and performance
-const inter = Inter({ 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  process.env.PUBLIC_APP_URL ||
+  'https://aniruddhaponnuri.vercel.app';
+const profileName = process.env.NEXT_PUBLIC_PROFILE_NAME || 'Ponnuri Aniruddha';
+
+// Variable fonts tuned for a stronger editorial feel.
+const manrope = Manrope({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-manrope',
   display: 'swap',
 });
 
-const interTight = Inter_Tight({
+const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
-  variable: '--font-inter-tight',
+  variable: '--font-space-grotesk',
   display: 'swap',
 });
 
@@ -27,14 +33,14 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Ponnuri Aniruddha - AI/ML Developer & Data Engineer',
-    template: '%s | Ponnuri Aniruddha'
+    default: `${profileName} - AI/ML Developer & Data Engineer`,
+    template: `%s | ${profileName}`,
   },
-  description: 'Aspiring AI/ML Developer and Data Engineer specializing in building innovative solutions using machine learning, data engineering, and modern web technologies. View my projects and experience.',
+  description: 'AI/ML developer and data engineer focused on useful systems, clean interfaces, and production-ready machine learning.',
   keywords: ['AI', 'ML', 'Machine Learning', 'Data Engineering', 'Full Stack Developer', 'React', 'Next.js', 'Python', 'TypeScript', 'Portfolio', 'Chennai', 'India'],
-  authors: [{ name: 'Ponnuri Aniruddha', url: 'https://aniruddhaponnuri.vercel.app' }],
-  creator: 'Ponnuri Aniruddha',
-  metadataBase: new URL('https://aniruddhaponnuri.vercel.app'),
+  authors: [{ name: profileName, url: siteUrl }],
+  creator: profileName,
+  metadataBase: new URL(siteUrl),
   alternates: {
     canonical: '/',
   },
@@ -55,17 +61,17 @@ export const metadata: Metadata = {
     apple: '/images/image.webp',
   },
   openGraph: {
-    title: 'Ponnuri Aniruddha - AI/ML Developer & Data Engineer',
-    description: 'Aspiring AI/ML Developer and Data Engineer specializing in building innovative solutions. Explore my portfolio of projects in machine learning, data engineering, and web development.',
-    url: 'https://aniruddhaponnuri.vercel.app',
-    siteName: 'Ponnuri Aniruddha Portfolio',
+    title: `${profileName} - AI/ML Developer & Data Engineer`,
+    description: 'Explore selected AI/ML and data engineering projects with a focus on execution quality and practical impact.',
+    url: siteUrl,
+    siteName: `${profileName} Portfolio`,
     locale: 'en_US',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Ponnuri Aniruddha - AI/ML Developer & Data Engineer',
-    description: 'Aspiring AI/ML Developer and Data Engineer. View my portfolio of AI/ML and data engineering projects.',
+    title: `${profileName} - AI/ML Developer & Data Engineer`,
+    description: 'AI/ML and data engineering portfolio with selected projects, writing, and contact details.',
   },
   // verification: {
   //   google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
@@ -84,8 +90,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${interTight.variable} ${jetbrainsMono.variable}`}>
-      <body className="font-sans antialiased" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={`${manrope.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
+      <body className="font-sans antialiased selection:bg-primary/20" suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

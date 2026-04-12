@@ -94,8 +94,7 @@ export default function SkillsSection() {
   const containerRef = useRef<HTMLElement>(null);
   const containerSize = useContainerQuery(containerRef);
   const prefersReducedMotion = useReducedMotion();
-  
-  // Adaptive grid columns based on container size
+
   const getGridColumns = () => {
     if (containerSize.size === 'xs') return 'grid-cols-1';
     if (containerSize.size === 'sm') return 'grid-cols-1 sm:grid-cols-2';
@@ -105,82 +104,82 @@ export default function SkillsSection() {
   };
 
   return (
-    <section id="skills" className="py-20 bg-muted/50" ref={containerRef}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">        <motion.div
+    <section id="skills" className="section-shell bg-muted/30" ref={containerRef}>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
           initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: prefersReducedMotion ? 0.01 : 0.5 }}
-          className="text-center mb-16"
+          transition={{ duration: prefersReducedMotion ? 0.01 : 0.46 }}
+          className="mb-16 text-center"
         >
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">My Skills</h2>
-          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto">
-            Explore my proficiency in various programming languages, frameworks, and tools used in the tech industry
+          <h2 className="section-title mb-4 text-3xl font-semibold sm:text-4xl lg:text-5xl">My Skills</h2>
+          <p className="section-lead mx-auto text-base sm:text-lg lg:text-xl">
+            Selected tools and technologies I use to build products across AI, data, and full-stack systems.
           </p>
         </motion.div>
-        
-        {/* Skills Grid Section */}
-        <div className="max-w-7xl mx-auto">
+
+        <div className="mx-auto max-w-7xl">
           <div className={`grid ${getGridColumns()} gap-6 lg:gap-8`}>
-            {skillCategories.map((category, categoryIndex) => (              <motion.div
+            {skillCategories.map((category, categoryIndex) => (
+              <motion.div
                 key={category.title}
-                initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 30 }}
+                initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ 
-                  duration: prefersReducedMotion ? 0.01 : 0.5, 
-                  delay: prefersReducedMotion ? 0 : categoryIndex * 0.1 
+                transition={{
+                  duration: prefersReducedMotion ? 0.01 : 0.42,
+                  delay: prefersReducedMotion ? 0 : categoryIndex * 0.06,
                 }}
                 className="h-full"
               >
-                <Card className={`h-full transition-all duration-300 ${prefersReducedMotion ? 'hover:shadow-lg' : 'hover:shadow-lg hover:-translate-y-1'}`}>
+                <Card className="h-full hover:-translate-y-0.5 hover:shadow-xl">
                   <CardHeader className="pb-4">
-                    <CardTitle className="text-lg sm:text-xl flex items-center">
-                      <div className="w-3 h-3 bg-primary rounded-full mr-3 flex-shrink-0" />
+                    <CardTitle className="section-title flex items-center text-lg font-semibold sm:text-xl">
+                      <div className="mr-3 h-2.5 w-2.5 flex-shrink-0 rounded-full bg-primary" />
                       {category.title}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                      {category.skills.map((skill, skillIndex) => (                        <motion.div
+                    <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+                      {category.skills.map((skill, skillIndex) => (
+                        <motion.div
                           key={skill.name}
-                          initial={{ opacity: 0, scale: prefersReducedMotion ? 1 : 0.8 }}
+                          initial={{ opacity: 0, scale: prefersReducedMotion ? 1 : 0.97 }}
                           whileInView={{ opacity: 1, scale: 1 }}
                           viewport={{ once: true }}
-                          transition={{ 
-                            duration: prefersReducedMotion ? 0.01 : 0.3, 
-                            delay: prefersReducedMotion ? 0 : categoryIndex * 0.1 + skillIndex * 0.05 
+                          transition={{
+                            duration: prefersReducedMotion ? 0.01 : 0.25,
+                            delay: prefersReducedMotion ? 0 : categoryIndex * 0.04 + skillIndex * 0.03,
                           }}
-                          whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
+                          whileHover={prefersReducedMotion ? {} : { y: -1 }}
                           className="group cursor-pointer"
                         >
-                          <div className="flex flex-col items-center p-2 sm:p-3 rounded-lg bg-background border border-border hover:border-primary/50 transition-all duration-200 min-h-[80px] sm:min-h-[90px]">
-                            <div className="flex-1 flex items-center justify-center mb-2">
+                          <div className="flex min-h-[90px] flex-col items-center rounded-lg border border-border/70 bg-background/70 p-2.5 text-center transition-[transform,border-color,box-shadow] duration-160 ease-[var(--ease-out)] group-hover:border-primary/45 group-hover:shadow-[0_10px_22px_color-mix(in_oklch,var(--primary)_18%,transparent)]">
+                            <div className="mb-2 flex flex-1 items-center justify-center">
                               <Image
                                 src={skill.icon}
                                 alt={`${skill.name} technology logo`}
-                                width={32}
-                                height={32}
-                                className="h-6 w-auto sm:h-8 sm:w-auto transition-transform duration-200 group-hover:scale-110"
-                                unoptimized // For external badge URLs
+                                width={36}
+                                height={36}
+                                className="h-7 w-auto transition-transform duration-150 group-hover:scale-105 sm:h-8"
+                                unoptimized
                                 onError={(e) => {
                                   e.currentTarget.style.display = 'none';
                                 }}
                               />
                             </div>
-                            <span className="text-xs sm:text-sm font-medium text-center leading-tight">
-                              {/* {skill.name} */}
-                            </span>
+                            <span className="text-xs font-medium leading-tight sm:text-sm">{skill.name}</span>
                           </div>
                         </motion.div>
                       ))}
                     </div>
                   </CardContent>
                 </Card>
-              </motion.div>            ))}
+              </motion.div>
+            ))}
           </div>
         </div>
-
       </div>
     </section>
   );

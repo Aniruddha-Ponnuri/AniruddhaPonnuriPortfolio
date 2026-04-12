@@ -4,7 +4,8 @@
 
 ![Portfolio Banner](https://img.shields.io/badge/Portfolio-AI%2FML%20Developer-blue?style=for-the-badge&logo=react&logoColor=white)
 
-[![Next.js](https://img.shields.io/badge/Next.js-15.3.3-black?style=flat&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.2.3-black?style=flat&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.2.5-149ECA?style=flat&logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.1.9-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Framer Motion](https://img.shields.io/badge/Framer%20Motion-12.17.0-0055FF?style=flat&logo=framer&logoColor=white)](https://www.framer.com/motion/)
@@ -53,8 +54,8 @@
 ## 🛠️ Tech Stack
 
 ### **Frontend Framework**
-- **Next.js 15.3.3** - App Router, Server Components, TypeScript
-- **React 19** - Latest features with concurrent rendering
+- **Next.js 16.2.3** - App Router, Server Components, TypeScript
+- **React 19.2.5** - Latest stable React runtime
 - **TypeScript 5** - Type-safe development environment
 
 ### **Styling & UI**
@@ -104,10 +105,21 @@
    cp .env.local.example .env.local
    ```
    
-   Add your API keys to `.env.local`:
+   Add your values to `.env.local`:
    ```env
    GITHUB_TOKEN=your_github_personal_access_token
+   PUBLIC_GITHUB_USERNAME=your_github_username
    GROQ_API_KEY=your_groq_api_key
+   PUBLIC_APP_URL=https://your-domain.com
+   PUBLIC_PROFILE_NAME=Your Full Name
+   PUBLIC_CONTACT_EMAIL=your.email@example.com
+   PUBLIC_PHONE=+91-0000000000
+   PUBLIC_LOCATION=Your City, Country
+   PUBLIC_GITHUB_PROFILE_URL=https://github.com/your-username
+   PUBLIC_LINKEDIN_URL=https://www.linkedin.com/in/your-linkedin-id/
+   PUBLIC_INSTAGRAM_URL=https://www.instagram.com/your-handle/
+   PUBLIC_MAPS_URL=https://www.google.com/maps/@13.0475255,80.2090117,8z
+   PUBLIC_RESUME_URL=https://drive.google.com/file/d/YOUR_FILE_ID/view?usp=drivesdk
    ```
 
 4. **Run the development server**
@@ -154,8 +166,18 @@ src/
 | Variable | Description | Required |
 |----------|-------------|----------|
 | `GITHUB_TOKEN` | GitHub Personal Access Token for API access | ✅ |
+| `PUBLIC_GITHUB_USERNAME` | GitHub username used by API routes | ✅ |
 | `GROQ_API_KEY` | Groq API key for AI README generation | ✅ |
-| `NODE_ENV` | Environment (development/production) | Auto-set |
+| `PUBLIC_APP_URL` | Public site URL used in metadata and sitemap | ✅ |
+| `PUBLIC_PROFILE_NAME` | Name displayed across hero, layout, and footer | ✅ |
+| `PUBLIC_CONTACT_EMAIL` | Contact email used in About, Contact, and Footer | ✅ |
+| `PUBLIC_PHONE` | Contact phone number shown in Contact section | Optional |
+| `PUBLIC_LOCATION` | Location label shown in About and Contact sections | Optional |
+| `PUBLIC_GITHUB_PROFILE_URL` | Footer GitHub profile link | Optional |
+| `PUBLIC_LINKEDIN_URL` | Footer LinkedIn link | Optional |
+| `PUBLIC_INSTAGRAM_URL` | Footer Instagram link | Optional |
+| `PUBLIC_MAPS_URL` | Map link used in contact cards | Optional |
+| `PUBLIC_RESUME_URL` | Resume download URL for hero and resume sections | ✅ |
 
 ### **GitHub Token Setup**
 1. Go to GitHub Settings → Developer Settings → Personal Access Tokens

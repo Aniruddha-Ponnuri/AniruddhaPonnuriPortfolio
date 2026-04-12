@@ -17,8 +17,14 @@ import ContactSection from '@/app/components/sections/contact';
 import { useReducedMotion, useContainerQuery } from '@/app/lib/responsive';
 import { GitHubUser, ProjectCard, SearchFilters } from '@/app/types';
 
+const GITHUB_USERNAME =
+  process.env.NEXT_PUBLIC_GITHUB_USERNAME ||
+  process.env.PUBLIC_GITHUB_USERNAME ||
+  'Aniruddha-Ponnuri';
+
 const fetchGitHubData = async () => {
-  const response = await fetch('/api/github');
+  const params = new URLSearchParams({ username: GITHUB_USERNAME });
+  const response = await fetch(`/api/github?${params.toString()}`);
   if (!response.ok) {
     throw new Error('Failed to fetch GitHub data');
   }
@@ -40,7 +46,7 @@ export default function HomePage() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['github-data'],
+    queryKey: ['github-data', GITHUB_USERNAME],
     queryFn: fetchGitHubData,
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes (replaces cacheTime in newer versions)
@@ -134,11 +140,14 @@ export default function HomePage() {
         body: JSON.stringify({
           repoData: {
             name: project.name,
+            fullName: project.full_name,
+            repoUrl: project.html_url,
             description: project.description,
             language: project.language,
             languages: project.languages,
             topics: project.topics,
             homepage: project.homepage,
+            license: project.license?.spdx_id || project.license?.name || null,
           },
         }),
       });
@@ -212,7 +221,7 @@ export default function HomePage() {
       </section>
       
       {/* Projects Section */}
-      <section id="projects" className="py-20" ref={projectsRef}>
+      <section id="projects" className="section-shell" ref={projectsRef}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto space-y-8 lg:space-y-12">
             <motion.div 
@@ -222,8 +231,8 @@ export default function HomePage() {
               transition={{ duration: prefersReducedMotion ? 0.01 : 0.5 }}
               className="text-center mb-12"
             >
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">My Projects</h2>
-              <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto">
+              <h2 className="section-title mb-4 text-3xl font-semibold sm:text-4xl lg:text-5xl">My Projects</h2>
+              <p className="section-lead mx-auto text-base sm:text-lg lg:text-xl">
                 Explore my latest work and open-source contributions
               </p>
             </motion.div>
@@ -244,13 +253,13 @@ export default function HomePage() {
               transition={{ duration: prefersReducedMotion ? 0.01 : 0.5, delay: prefersReducedMotion ? 0 : 0.2 }}
             >
               <ClientOnly fallback={
-                <div className="space-y-4 p-4 border rounded-lg bg-card">
+                <div className="surface-card space-y-4 rounded-xl p-5">
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div className="lg:col-span-2 h-10 bg-gray-200 rounded animate-pulse" />
-                    <div className="h-10 bg-gray-200 rounded animate-pulse" />
-                    <div className="h-10 bg-gray-200 rounded animate-pulse" />
+                    <div className="h-10 rounded-md bg-muted lg:col-span-2 animate-pulse" />
+                    <div className="h-10 rounded-md bg-muted animate-pulse" />
+                    <div className="h-10 rounded-md bg-muted animate-pulse" />
                   </div>
-                  <div className="h-20 bg-gray-200 rounded animate-pulse" />
+                  <div className="h-20 rounded-md bg-muted animate-pulse" />
                 </div>
               }>
                 <SearchFiltersComponent
@@ -273,7 +282,7 @@ export default function HomePage() {
                 transition={{ duration: prefersReducedMotion ? 0.01 : 0.5, delay: prefersReducedMotion ? 0 : 0.3 }}
                 className="flex items-center justify-between"
               >
-                <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold">
+                <h3 className="section-title text-xl font-semibold sm:text-2xl lg:text-3xl">
                   Projects ({filteredRepositories.length})
                 </h3>
               </motion.div>
