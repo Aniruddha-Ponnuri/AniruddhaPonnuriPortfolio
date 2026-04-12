@@ -69,10 +69,10 @@ const config: Config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)"
       },      fontFamily: {
-        'sans': ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
-        'display': ['var(--font-inter-tight)', 'Inter Tight', 'Inter', 'system-ui', 'sans-serif'],
+        'sans': ['var(--font-manrope)', 'Manrope', 'system-ui', 'sans-serif'],
+        'display': ['var(--font-space-grotesk)', 'Space Grotesk', 'system-ui', 'sans-serif'],
         'mono': ['var(--font-jetbrains-mono)', 'JetBrains Mono', 'Fira Code', 'Consolas', 'monospace'],
-        'variable': ['var(--font-inter)', 'Inter Variable', 'Inter', 'system-ui', 'sans-serif'],
+        'variable': ['var(--font-manrope)', 'Manrope', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         'fluid-xs': 'clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem)',

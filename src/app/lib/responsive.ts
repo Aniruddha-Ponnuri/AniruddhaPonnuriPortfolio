@@ -150,9 +150,9 @@ export const media = {
 // Animation utilities that work well with responsive design
 export const animation = {
   entrance: {
-    fadeInUp: 'animate-in slide-in-from-bottom-4 fade-in duration-700',
-    fadeInLeft: 'animate-in slide-in-from-left-4 fade-in duration-700',
-    fadeInRight: 'animate-in slide-in-from-right-4 fade-in duration-700',
+    fadeInUp: 'animate-in slide-in-from-bottom-4 fade-in duration-240',
+    fadeInLeft: 'animate-in slide-in-from-left-4 fade-in duration-240',
+    fadeInRight: 'animate-in slide-in-from-right-4 fade-in duration-240',
     stagger: (delay: number) => `animation-delay-${delay * 100}`
   }
 } as const;
